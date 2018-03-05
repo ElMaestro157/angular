@@ -1,0 +1,46 @@
+.main {
+  margin: 2% 2%;
+  padding: 3%;
+  display: flex;
+  justify-content: space-between;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 300%;
+  border: solid gray;
+}
+
+.imglogobut, .userlogoff{
+  display: flex;
+  align-items: center;
+}
+
+.imglogobut > * {
+  margin-right: 10%;
+}
+
+.logo {
+  height: 70px;
+  width: 70px;
+}
+
+.courses {
+  padding: 2%;
+  border: solid gray;
+  background: bisque;
+  font-size: 50%;
+}
+
+.userlogoff {
+  font-size: 40%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logoff {
+  align-self: flex-end;
+  text-decoration: underline;
+  color: blue;
+}
+
+
+
+
