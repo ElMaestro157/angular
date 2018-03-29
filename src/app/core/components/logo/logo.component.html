@@ -1,11 +1,11 @@
 <div class="main">
-  <div class="imglogobut">
-    <img class="logo" src="../../../../favicon">
-    <div>Logo</div>
-    <div class="courses">Courses</div>
+  <div class="img-logo-but">
+    <img class="logo" src="assets/logo.png">
+    <span>Logo</span>
+    <span class="courses" *ngIf="isAuthenticated()">Courses</span>
   </div>
-  <div class="userlogoff">
-    <div>user login</div>
-    <div class="logoff">logoff</div>
+  <div class="user-logoff" *ngIf="isAuthenticated()">
+    <div>{{getUserName() | async}}</div>
+    <div class="logoff"><a (click)="logoff()">logoff</a></div>
   </div>
 </div>

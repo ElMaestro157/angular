@@ -1,0 +1,16 @@
+<div class="without-desc">
+  <div class="tit-id-dur">
+    <div class="title">{{course.title | uppercase}}</div>
+    <div class="id">{{course.id}}</div>
+    <div class="duration-star">
+      <div class="duration">
+        {{course.duration | courseDuration}}
+      </div>
+      <object *ngIf="course.topRated" type="image/svg+xml" data="assets/star.svg" class="star">
+        Your browser does not support SVG
+      </object>
+    </div>
+  </div>
+  <div class="date">{{course.date | date: 'dd/MM/yy'}}</div>
+</div>
+<p class="desc">{{course.description}}</p>

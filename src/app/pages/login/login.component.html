@@ -1,3 +1,12 @@
-<p>
-  login works!
-</p>
+<app-loader-block></app-loader-block>
+<form [formGroup]="formGroup" class="main">
+  <div>
+    <label for="login">Login</label>
+    <input formControlName="login" class="form-control input" type="text" />
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input class="form-control input" type="password" formControlName="password"/>
+  </div>
+  <button [disabled]="formGroup.invalid" class="btn btn-primary enter" (click)="enter()">Enter</button>
+</form>

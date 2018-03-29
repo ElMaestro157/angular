@@ -1,0 +1,17 @@
+app-loader-block {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
+
+.button-add {
+  margin-top: 5%;
+  text-align: center;
+}
+
+.btn {
+  font-weight: 600;
+  width: 300px;
+}

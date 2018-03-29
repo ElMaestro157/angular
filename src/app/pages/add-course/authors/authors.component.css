@@ -1,0 +1,33 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.list-group {
+  overflow-y: scroll;
+  height: 200px;
+}
+
+.list-group-item {
+  color: black;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 200px;
+}
+
+.active {
+  color: white;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+  min-height: 10px;
+  min-width: 10px;
+}

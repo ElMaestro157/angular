@@ -1,0 +1,24 @@
+<div class="main">
+  <ul class="list-group" *ngIf="selectedAuthors.length !== 0">
+    <li (click)="selected[0] = i;" class="list-group-item" [ngClass]="{ 'active': selected[0] === i }" *ngFor="let author of selectedAuthors; let i = index">
+      {{author}}
+    </li>
+  </ul>
+  <div class="buttons">
+    <button class="btn btn-primary" (click)="onClick(0)" [disabled]="!selectedAuthors.length">
+      <object type="image/svg+xml" data="assets/angle-right.svg" class="icon">
+        Your browser does not support SVG
+      </object>
+    </button>
+    <button class="btn btn-primary" (click)="onClick(1)" [disabled]="!allAuthors.length">
+      <object type="image/svg+xml" data="assets/angle-left.svg" class="icon">
+        Your browser does not support SVG
+      </object>
+    </button>
+  </div>
+  <ul class="list-group" *ngIf="allAuthors.length !== 0">
+    <li (click)="selected[1] = i;" class="list-group-item" [ngClass]="{ 'active': selected[1] === i }" *ngFor="let author of allAuthors; let i = index">
+      {{author}}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,13 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input {
+  width: 50%;
+}
+
+label {
+  margin-bottom: 0;
+}

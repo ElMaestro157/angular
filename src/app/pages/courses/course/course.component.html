@@ -1,3 +1,8 @@
-<p>
-  course works!
-</p>
+
+<div class="main" [appCourseDate]="this.course.date" [ngClass]="{ 'top-rated': course.topRated }">
+  <app-course-details class="course" [course]="course"></app-course-details>
+  <div class="buttons">
+    <button type="button" class="btn btn-primary">Edit course</button>
+    <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
+  </div>
+</div>

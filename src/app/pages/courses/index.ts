@@ -1,2 +1,1 @@
-export * from './course';
-export * from './course-details';
+export * from './courses.module';

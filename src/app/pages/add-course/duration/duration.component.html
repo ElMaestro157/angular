@@ -1,0 +1,6 @@
+<form [formGroup]="formGroup" class="main">
+  <input class="form-control" type="text" (blur)="onTouch()" formControlName="duration" [ngClass]="{ 'is-invalid': ngControl.invalid }"/>
+  <label *ngIf="formGroup.get('duration').valid && formGroup.get('duration').dirty && +formGroup.get('duration').value >= 0">
+    {{formGroup.get('duration').value | courseDuration}}
+  </label>
+</form>
