@@ -1,6 +1,7 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LoginService, LoaderBlockServiceService } from '../../core/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,10 @@ export class LoginComponent implements OnInit {
 
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService, private loaderService: LoaderBlockServiceService) { }
+  constructor(private fb: FormBuilder,
+    private loginService: LoginService,
+    private loaderService: LoaderBlockServiceService,
+    private router: Router) { }
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -27,11 +31,8 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.formGroup.controls.login.value, this.formGroup.controls.password.value)
       .subscribe(() => {
         alert('Success');
-        /////
-        this.loginService.getUserInfo().subscribe(
-          (user) => console.log(user));
-        ////
         this.loaderService.hide();
+        this.router.navigateByUrl('courses');
       },
         (val) => {
           alert('Failed');

@@ -12,6 +12,7 @@ import { NoDataModule } from './no-data';
 import { CoursesService } from './courses-service';
 
 import { CoursesOrderByPipeModule } from './courses-order-by-pipe';
+import { CanActivateService } from '../../core/services';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { CoursesOrderByPipeModule } from './courses-order-by-pipe';
     CoursesOrderByPipeModule,
     HttpModule
   ],
-  providers: [CoursesService, HttpModule],
+  providers: [CanActivateService, CoursesService, HttpModule],
   declarations: [CoursesComponent],
   exports: [CoursesComponent]
 })

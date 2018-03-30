@@ -6,6 +6,8 @@ import { AddCourseComponent } from './add-course.component';
 import { AuthorsModule, AuthorsService } from './authors';
 import { DurationModule } from './duration';
 import { DateModule } from './date';
+import { CoursesService } from '../courses/courses-service';
+import { CanActivateService } from '../../core/services';
 
 @NgModule({
   imports: [
@@ -14,9 +16,9 @@ import { DateModule } from './date';
     AuthorsModule,
     DurationModule,
     DateModule,
-    HttpModule
+    HttpModule,
   ],
-  providers: [AuthorsService, HttpModule],
+  providers: [CanActivateService, AuthorsService, CoursesService, HttpModule],
   exports: [AddCourseComponent],
   declarations: [AddCourseComponent]
 })

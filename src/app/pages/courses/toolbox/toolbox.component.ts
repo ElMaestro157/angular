@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CoursesService } from '../courses-service';
 
@@ -11,7 +12,7 @@ export class ToolboxComponent implements OnInit {
 
   value = '';
 
-  constructor(private courseService: CoursesService) {
+  constructor(private router: Router, private courseService: CoursesService) {
   }
 
   ngOnInit() {
@@ -19,5 +20,9 @@ export class ToolboxComponent implements OnInit {
 
   onClick() {
     this.courseService.filter(this.value);
+  }
+
+  createCourse() {
+    this.router.navigate(['courses', 'new']);
   }
 }

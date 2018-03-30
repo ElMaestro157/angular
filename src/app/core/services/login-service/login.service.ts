@@ -12,6 +12,10 @@ export class LoginService {
   private userName: BehaviorSubject<string> = new BehaviorSubject(null);
   private token: string = null;
 
+  get getToken(): string {
+    return this.token;
+  }
+
   private baseURL = 'http://localhost:3004';
 
   constructor(private http: Http) { }
@@ -45,6 +49,7 @@ export class LoginService {
 
   login(login: string, password: string): Observable<void> {
     const requestOptions = new RequestOptions();
+
     requestOptions.method = RequestMethod.Post;
     requestOptions.body = {
       login: login,

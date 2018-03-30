@@ -12,8 +12,6 @@ module.exports = (server) => {
 			sort = query.sort,
 			queryStr = query.query,
 			courses = server.db.getState().courses;
-		console.log(sort);
-    console.log(queryStr);
     if (queryStr) {
       queryStr = queryStr.toLowerCase();
       courses = courses.filter((val) => {
@@ -23,7 +21,8 @@ module.exports = (server) => {
 		if (!to || courses.length < to) {
 			to = courses.length;
 		}
-		courses = courses.slice(from, to);
+    courses = courses.slice(from, to);
+
 
 		res.json(courses);
   });
@@ -31,7 +30,23 @@ module.exports = (server) => {
   router.get('/courses/:id', (req, res, next) => {
     const id = +req.params.id;
     let courses = server.db.getState().courses;
-    console.log(id);
+    if (id) {
+      let course = courses.find((value) => {
+        return id === value.id;
+      });
+      if (!course) {
+        res.status(401).send("Wrong id");
+      } else {
+        res.json(course);
+      }
+    } else {
+      res.status(401).send("Wrong id");
+    }
+  });
+
+  router.delete('/courses/:id', (req, res, next) => {
+    const id = +req.params.id;
+    let courses = server.db.getState().courses;
     if (id) {
       let course = courses.find((value) => {
         return id === value.id;

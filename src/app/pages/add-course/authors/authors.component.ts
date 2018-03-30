@@ -33,7 +33,6 @@ export class AuthorsComponent implements OnInit, ControlValueAccessor {
       this.allAuthors = authors.map((val) => `${val['firstName']} ${val['lastName']}`);
       this.changeDetector.markForCheck();
     });
-    console.log(this.allAuthors, this.selectedAuthors);
   }
 
   get value(): string[] {

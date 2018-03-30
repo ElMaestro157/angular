@@ -15,8 +15,7 @@ export class AuthorsService {
     requestOptions.method = RequestMethod.Get;
     requestOptions.url = this.baseURL + '/authors';
     if (course) {
-      requestOptions.params = new URLSearchParams();
-      requestOptions.params.set('id', course.id + '');
+      requestOptions.url += `/${course.id}`;
     }
 
     const request = new Request(requestOptions);

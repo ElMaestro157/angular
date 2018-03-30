@@ -11,7 +11,7 @@
   <div class="form-group row">
     <label class="col-2 col-form-label" for="description">Description</label>
     <div class="col-8">
-      <textarea class="form-control input" [ngClass]="{ 'is-invalid': formGroup.get('description')?.invalid }" formControlName="description"></textarea>
+      <textarea class="form-control input description-area" [ngClass]="{ 'is-invalid': formGroup.get('description')?.invalid }" formControlName="description"></textarea>
     </div>
     <div class="invalid" *ngIf="formGroup.get('description')?.invalid && formGroup.get('description').touched && formGroup.get('description').value === ''">
       * required
@@ -49,6 +49,6 @@
   </div>
   <div>
     <button type="submit" [disabled]="formGroup.invalid" class="btn btn-primary">Save</button>
-    <button class="btn btn-primary">Cancel</button>
+    <button class="btn btn-primary" (click)="cancel()">Cancel</button>
   </div>
 </form>

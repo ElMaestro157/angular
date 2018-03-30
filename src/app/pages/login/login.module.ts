@@ -1,3 +1,5 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpInterceptorService } from './../../core/services';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +18,7 @@ import { HttpModule } from '@angular/http';
     LoaderBlockModule,
     HttpModule
   ],
-  providers: [LoginService, HttpModule],
+  providers: [LoginService],
   exports: [LoginComponent],
   declarations: [LoginComponent]
 })

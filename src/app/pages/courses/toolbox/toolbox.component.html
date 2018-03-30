@@ -3,7 +3,7 @@
     <input type="text" class="form-control input" placeholder="name fragment or date" [(ngModel)]="value">
     <button (click)='onClick()' type="button" class="btn btn-primary find">Find</button>
   </div>
-  <button type="button" class="btn btn-primary add">
+  <button type="button" class="btn btn-primary add" (click)="createCourse()">
     <img class="icon" src="assets/add.png">
     <span>Add course</span>
   </button>

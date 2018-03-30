@@ -11,13 +11,13 @@ export class AppComponent {
   title = 'app';
 
   constructor(private zone: NgZone) {
-    this.zone.onUnstable.subscribe(() => {
-      // console.log('Detection started');
-      this.timer = performance.now();
-    });
-    this.zone.onStable.subscribe(() => {
-      this.timer = -this.timer + performance.now();
-      console.log('Detection ended. Time: ', this.timer, ' ms');
-    });
+    // this.zone.onUnstable.subscribe(() => {
+    //   // console.log('Detection started');
+    //   this.timer = performance.now();
+    // });
+    // this.zone.onStable.subscribe(() => {
+    //   this.timer = -this.timer + performance.now();
+    //   console.log('Detection ended. Time: ', this.timer, ' ms');
+    // });
   }
 }

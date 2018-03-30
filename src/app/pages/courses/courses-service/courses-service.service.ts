@@ -53,20 +53,20 @@ export class CoursesService {
     return this.http.request(request)
               .map((res) => res.json())
               .map((coursesObj) => {
-                return this.map(coursesObj);
+                return Array.from(coursesObj).map((obj) => this.map(obj));
               });
   }
 
   private deleteFromServer(id: number): Observable<CourseItem[]> {
     const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Get;
+    requestOptions.method = RequestMethod.Delete;
     requestOptions.url = this.baseURL + '/courses/' + id;
 
     const request = new Request(requestOptions);
     return this.http.request(request)
       .map((res) => res.json())
       .map((coursesObj) => {
-        return this.map(coursesObj);
+        return Array.from(coursesObj).map((obj) => this.map(obj));
       });
   }
 
@@ -84,8 +84,17 @@ export class CoursesService {
     return null;
   }
 
-  getItem(id: number): CourseItem {
-    return this.courselist.value.find((elem) => elem.id === id || null);
+  getItem(id: number): Observable<CourseItem> {
+    const requestOptions = new RequestOptions();
+    requestOptions.method = RequestMethod.Get;
+    requestOptions.url = this.baseURL + '/courses/' + id;
+
+    const request = new Request(requestOptions);
+    return this.http.request(request)
+      .map((res) => res.json())
+      .map((coursesObj) => {
+        return this.map(coursesObj);
+      });
   }
 
   updateItem(id: number) {
@@ -117,10 +126,8 @@ export class CoursesService {
     );
   }
 
-  private map(coursesFromServer: any[]): CourseItem[] {
-    return coursesFromServer.map((val) => {
-      return new CourseItem(val.id, val.name, val.date, val.length, val.description, val.isTopRated);
-    });
+  private map(val: any): CourseItem {
+    return new CourseItem(+val.id, val.name, new Date(val.date), +val.length, val.description, !!val.isTopRated);
   }
 
 }
