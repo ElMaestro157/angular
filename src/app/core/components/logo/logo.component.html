@@ -2,7 +2,7 @@
   <div class="img-logo-but">
     <img class="logo" src="assets/logo.png">
     <span>Logo</span>
-    <button class="courses btn btn-primary breadcrumb-item active" *ngIf="isAuthenticated()" (click)="breadCrumbClick()">Courses</button>
+    <button class="courses btn btn-primary breadcrumb-item active" *ngIf="isAuthenticated()" (click)="breadCrumbClick()">{{logo}}</button>
     <!-- <span>{{getCourseName() | async}}</span> -->
   </div>
   <div class="user-logoff" *ngIf="isAuthenticated()">

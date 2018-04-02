@@ -10,17 +10,20 @@ export class AuthorsService {
 
   constructor(private http: Http) { }
 
-  getAuthors(course?: CourseItem): Observable<any[]> {
+  getAuthors(course?: CourseItem): Observable<string[]> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.baseURL + '/authors';
+    requestOptions.url = this.baseURL + '/courses';
     if (course) {
       requestOptions.url += `/${course.id}`;
+    } else {
+      requestOptions.url += '/getAuthors';
     }
 
     const request = new Request(requestOptions);
 
     return this.http.request(request)
-          .map((res) => res.json());
+          .map((res) => res.json())
+          .map(value => course ? value.authors : value);
   }
 }

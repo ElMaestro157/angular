@@ -1,7 +1,7 @@
 import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CourseItem } from './../../../core/entities';
+import { CourseItem, Author } from './../../../core/entities';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/skip';
 
@@ -70,18 +70,36 @@ export class CoursesService {
       });
   }
 
-  createCourse(id: number, title: string, date: Date, duration: number, description: string, topRated: boolean): CourseItem {
-    const tempDate = new Date();
-    tempDate.setDate(date.getDate() - 14);
-
-    if (date >= tempDate) {
-      const course = new CourseItem(id, title, date, duration, description, topRated);
-      const newCourseList = this.courselist.value.splice(-1, 0, course);
-      this.courselist.next(newCourseList);
-      return course;
+  private createUpdateCourseFromServer(course: CourseItem): Observable<CourseItem[]> {
+    const requestOptions = new RequestOptions();
+    requestOptions.method = RequestMethod.Post;
+    requestOptions.url = this.baseURL + '/courses';
+    requestOptions.body = this.mapReverse(course);
+    if (course.id || course.id === 0) {
+      requestOptions.url += '/' + course.id;
+      requestOptions.body.id = course.id;
     }
+    const request = new Request(requestOptions);
+    return this.http.request(request)
+      .map((res) => res.json())
+      .map((coursesObj) => {
+        return Array.from(coursesObj).map((obj) => this.map(obj));
+      });
+  }
 
-    return null;
+  createUpdateCourse(course: CourseItem) {
+    // const tempDate = new Date();
+    // tempDate.setDate(date.getDate() - 14);
+
+    this.createUpdateCourseFromServer(course).subscribe((courses) => {
+      this.courselist.next(courses);
+    });
+
+    // if (course.date >= tempDate) {
+    //   const newCourseList = this.courselist.value.splice(-1, 0, course);
+    //   this.courselist.next(newCourseList);
+    //   return course;
+    // }
   }
 
   getItem(id: number): Observable<CourseItem> {
@@ -92,14 +110,8 @@ export class CoursesService {
     const request = new Request(requestOptions);
     return this.http.request(request)
       .map((res) => res.json())
-      .map((coursesObj) => {
-        return this.map(coursesObj);
-      });
+      .map((value) => this.map(value));
   }
-
-  updateItem(id: number) {
-
-  }// don't understand
 
   removeItem(item: CourseItem) {
     this.deleteFromServer(item.id).subscribe((courses) => {
@@ -127,7 +139,37 @@ export class CoursesService {
   }
 
   private map(val: any): CourseItem {
-    return new CourseItem(+val.id, val.name, new Date(val.date), +val.length, val.description, !!val.isTopRated);
+    return new CourseItem(+val.id,
+      val.name, new Date(val.date),
+      +val.length, val.description,
+      !!val.isTopRated,
+      this.mapAuthors(val.authors));
+  }
+
+  private mapReverse(course: CourseItem): any {
+    return {
+      // id: course.id,
+      name: course.title,
+      description: course.description,
+      isTopRated: course.topRated,
+      date: course.date.toDateString(),
+      authors: this.mapAuthorsReverse(course.authors),
+      length: '' + course.duration,
+    };
+  }
+
+  private mapAuthors(authors: any[]): Author[] {
+    return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
+  }
+
+  private mapAuthorsReverse(authors: Author[]): any[] {
+    return authors.map((value) => {
+      return {
+        id: value.id,
+        firstName: value.firstName,
+        lastName: value.lastName
+      };
+    });
   }
 
 }

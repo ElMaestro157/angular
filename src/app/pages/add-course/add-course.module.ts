@@ -18,7 +18,7 @@ import { CanActivateService } from '../../core/services';
     DateModule,
     HttpModule,
   ],
-  providers: [CanActivateService, AuthorsService, CoursesService, HttpModule],
+  providers: [CanActivateService, CoursesService, AuthorsService, HttpModule],
   exports: [AddCourseComponent],
   declarations: [AddCourseComponent]
 })

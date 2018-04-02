@@ -1,3 +1,4 @@
+import { Author } from './author';
 import { Course } from './course';
 
 export class CourseItem implements Course {
@@ -8,6 +9,7 @@ export class CourseItem implements Course {
     public date: Date,
     public duration: number,
     public description: string,
-    public topRated: boolean
+    public topRated: boolean,
+    public authors: Author[]
   ) {  }
 }

@@ -25,11 +25,11 @@ export class DateComponent implements OnInit, ControlValueAccessor {
     this.formGroup.valueChanges.subscribe(data => this.onChange(this.value));
   }
 
-  get value() {
+  get value(): string {
     return this.formGroup.get('date').value;
   }
 
-  get touched() {
+  get touched(): boolean {
     return this.formGroup.get('date').touched;
   }
 

@@ -1,6 +1,6 @@
+import { AuthorsService, authorValidator } from './authors';
 import { CoursesService } from './../courses/courses-service';
 import { CourseItem } from './../../core/entities';
-import { AuthorsService } from './authors/authors-service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { dateValidator } from './date';
@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AddCourseComponent implements OnInit {
 
+  private id: number = null;
+  private isTopRated: boolean = null;
   formGroup: FormGroup;
   authors: string[];
 
@@ -27,20 +29,19 @@ export class AddCourseComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((val) => {
       if (val.id) {
-        this.courseService.getItem(+val.id).subscribe((value) => {
-          const course = value;
-          this.authorsServ.getAuthors(course).subscribe((authors) => {
-            const month = course.date.getMonth() + 1;
-            const day = course.date.getDate() + 1;
-            this.formGroup.setValue({
-              title: course.title,
-              description: course.description,
-              date: `${day < 10 ? '0' + day : day + ''}/${month < 10 ? '0' + month : month + ''}/${course.date.getFullYear()}`,
-              duration: course.duration,
-              authors: authors.map((author) => `${author['firstName']} ${author['lastName']}`)
-            });
-            this.changeDetector.markForCheck();
+        this.courseService.getItem(+val.id).subscribe((course) => {
+          const month = course.date.getMonth() + 1;
+          const day = course.date.getDate() + 1;
+          this.formGroup.setValue({
+            title: course.title,
+            description: course.description,
+            date: `${day < 10 ? '0' + day : day + ''}/${month < 10 ? '0' + month : month + ''}/${course.date.getFullYear()}`,
+            duration: course.duration,
+            authors: course.authors
           });
+          this.id = course.id;
+          this.isTopRated = course.topRated;
+          this.changeDetector.markForCheck();
         });
       }
     });
@@ -49,12 +50,21 @@ export class AddCourseComponent implements OnInit {
       description: ['', [Validators.maxLength(500), Validators.required]],
       date: new FormControl('', [dateValidator, Validators.required]),
       duration: new FormControl('', [durationValidator, Validators.required, Validators.maxLength(3)]),
-      authors: new FormControl([])
+      authors: new FormControl([], [authorValidator])
     });
   }
 
   save() {
-    console.log(this.formGroup.value);
+    const dateArr = this.formGroup.value.date.split('/');
+    const course = new CourseItem(
+      this.id,
+      this.formGroup.value.title,
+      new Date(+dateArr[2], +dateArr[1] - 1, +dateArr[0]),
+      +this.formGroup.value.duration,
+      this.formGroup.value.description,
+      !!this.isTopRated,
+      this.formGroup.value.authors);
+      this.courseService.createUpdateCourse(course);
     this.router.navigateByUrl('courses');
   }
 

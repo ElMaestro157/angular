@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Author } from '../../../core/entities';
 
 @Component({
   selector: 'app-authors',
@@ -17,9 +18,9 @@ import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDe
 })
 export class AuthorsComponent implements OnInit, ControlValueAccessor {
 
-  selectedAuthors: string[] = [];
-  @Input() authors: Observable<any[]>;
-  allAuthors: string[] = [];
+  selectedAuthors: Author[] = [];
+  @Input() authors: Observable<Author[]>;
+  allAuthors: Author[] = [];
 
   selected = [0, 0];
 
@@ -30,16 +31,22 @@ export class AuthorsComponent implements OnInit, ControlValueAccessor {
     // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     // Add 'implements OnInit' to the class.
     this.authors.subscribe((authors) => {
-      this.allAuthors = authors.map((val) => `${val['firstName']} ${val['lastName']}`);
+      if (this.value !== []) {
+        const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.id));
+        this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.id));
+      } else {
+        this.allAuthors = authors;
+      }
       this.changeDetector.markForCheck();
     });
   }
 
-  get value(): string[] {
+  get value(): Author[] {
     return this.selectedAuthors;
   }
 
   onClick(ind: number) {
+    this.onTouch();
     const numb = this.selected[ind];
     const temp = !ind ? this.selectedAuthors[numb] : this.allAuthors[numb];
     if (!ind) {
@@ -50,12 +57,13 @@ export class AuthorsComponent implements OnInit, ControlValueAccessor {
       this.selectedAuthors.push(temp);
     }
     this.selected[ind] = 0;
+    this.onChange(this.selectedAuthors);
   }
 
   onChange = (_) => { };
   onTouch = () => { };
 
-  writeValue(obj: string[]): void {
+  writeValue(obj: Author[]): void {
     this.selectedAuthors = obj;
     this.onChange(obj);
   }
