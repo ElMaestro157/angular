@@ -17,9 +17,9 @@ export class CoursesComponent implements OnInit, OnDestroy {
   private subscriber: Subscription;
 
   constructor(private changeDetector: ChangeDetectorRef,
-    private coursesService: CoursesService, private loaderService: LoaderBlockServiceService) {
-
-  }
+              private coursesService: CoursesService,
+              private loaderService: LoaderBlockServiceService
+            ) { }
 
   ngOnInit() {
     this.subscriber = this.coursesService.getList.subscribe((val) => {

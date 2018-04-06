@@ -1,35 +1,51 @@
+import { DELETE_COURSE } from './../courses-redux-reducer';
+import { Store } from '@ngrx/store';
+import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CourseItem, Author } from './../../../core/entities';
-import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/skip';
+
+import { AppState } from '../../../app.redux';
+import { SET_LIST, ADD_COURSE, EDIT_COURSE } from '../courses-redux-reducer';
+import { CourseItem, Author } from './../../../core/entities';
 
 @Injectable()
 export class CoursesService {
 
-  public courselist: BehaviorSubject<CourseItem[]> = new BehaviorSubject([]);
+  // public courselist: BehaviorSubject<CourseItem[]> = new BehaviorSubject([]);
   private baseURL = 'http://localhost:3004';
   private pages = new BehaviorSubject<number>(1);
   private search = new BehaviorSubject<string>(null);
 
-  constructor(private http: Http) {
-  }
-
-  get getList(): Observable<CourseItem[]> {
+  constructor(private http: Http, private store: Store<AppState>) {
     this.pages.subscribe((val) => {
       this.getListFromServer(val).subscribe((courses) => {
-        this.courselist.next(courses);
+        this.store.dispatch({ type: SET_LIST, payload: courses });
       });
     });
 
     this.search.skip(1).subscribe((val) => {
       this.getListFromServer(0, val).subscribe((courses) => {
-        this.courselist.next(courses);
+        this.store.dispatch({ type: SET_LIST, payload: courses });
       });
     });
 
-    return this.courselist.asObservable();
+    this.store.select('addEditCourse').skip(1).subscribe((course) => {
+      this.createUpdateCourseFromServer(course).subscribe((res) => {
+        if (+res || res === '0') {
+          course.id = +res;
+          this.store.dispatch({ type: ADD_COURSE, payload: course });
+        } else {
+          this.store.dispatch({ type: EDIT_COURSE, payload: course });
+        }
+      });
+    });
+  }
+
+  get getList(): Observable<CourseItem[]> {
+    return this.store.select('courses');
   }
 
   increasePages() {
@@ -57,20 +73,16 @@ export class CoursesService {
               });
   }
 
-  private deleteFromServer(id: number): Observable<CourseItem[]> {
+  private deleteFromServer(id: number): Observable<Response> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Delete;
     requestOptions.url = this.baseURL + '/courses/' + id;
 
     const request = new Request(requestOptions);
-    return this.http.request(request)
-      .map((res) => res.json())
-      .map((coursesObj) => {
-        return Array.from(coursesObj).map((obj) => this.map(obj));
-      });
+    return this.http.request(request);
   }
 
-  private createUpdateCourseFromServer(course: CourseItem): Observable<CourseItem[]> {
+  private createUpdateCourseFromServer(course: CourseItem): Observable<String> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Post;
     requestOptions.url = this.baseURL + '/courses';
@@ -81,26 +93,9 @@ export class CoursesService {
     }
     const request = new Request(requestOptions);
     return this.http.request(request)
-      .map((res) => res.json())
-      .map((coursesObj) => {
-        return Array.from(coursesObj).map((obj) => this.map(obj));
-      });
+                .map(res => res.text());
   }
 
-  createUpdateCourse(course: CourseItem) {
-    // const tempDate = new Date();
-    // tempDate.setDate(date.getDate() - 14);
-
-    this.createUpdateCourseFromServer(course).subscribe((courses) => {
-      this.courselist.next(courses);
-    });
-
-    // if (course.date >= tempDate) {
-    //   const newCourseList = this.courselist.value.splice(-1, 0, course);
-    //   this.courselist.next(newCourseList);
-    //   return course;
-    // }
-  }
 
   getItem(id: number): Observable<CourseItem> {
     const requestOptions = new RequestOptions();
@@ -115,7 +110,7 @@ export class CoursesService {
 
   removeItem(item: CourseItem) {
     this.deleteFromServer(item.id).subscribe((courses) => {
-      this.courselist.next(courses);
+      this.store.dispatch({ type: DELETE_COURSE, payload: item });
     });
   }
 
@@ -131,11 +126,12 @@ export class CoursesService {
     const date = new Date();
     date.setDate(date.getDate() - 14);
 
-    this.courselist.next(
-      this.courselist.value.filter((val) => {
-        return val.date >= date;
-      })
-    );
+    this.store.select('courses').subscribe(courses => {
+      this.store.dispatch({
+        type: SET_LIST, payload: courses.filter((val) => {
+          return val.date >= date;
+        })});
+    });
   }
 
   private map(val: any): CourseItem {

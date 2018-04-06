@@ -1,6 +1,8 @@
-import { Observable } from 'rxjs/Observable';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { Author } from '../../../core/entities';
 
 @Component({
@@ -16,11 +18,13 @@ import { Author } from '../../../core/entities';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthorsComponent implements OnInit, ControlValueAccessor {
+export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   selectedAuthors: Author[] = [];
   @Input() authors: Observable<Author[]>;
   allAuthors: Author[] = [];
+
+  private subscriber: Subscription;
 
   selected = [0, 0];
 
@@ -28,9 +32,7 @@ export class AuthorsComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    // Add 'implements OnInit' to the class.
-    this.authors.subscribe((authors) => {
+    this.subscriber = this.authors.subscribe((authors) => {
       if (this.value !== []) {
         const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.id));
         this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.id));
@@ -39,6 +41,10 @@ export class AuthorsComponent implements OnInit, ControlValueAccessor {
       }
       this.changeDetector.markForCheck();
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriber.unsubscribe();
   }
 
   get value(): Author[] {

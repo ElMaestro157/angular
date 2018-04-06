@@ -9,9 +9,8 @@ module.exports = (server) => {
       courses = server.db.getState().courses;
 
     course.id = Math.max(...courses.map(val => +val.id)) + 1;
-    console.log(course);
     courses.push(course);
-    res.json(courses);
+    res.json(course.id);
   });
 
 	router.get('/courses', (req, res, next) => {
@@ -50,51 +49,43 @@ module.exports = (server) => {
   router.post('/courses/:id([0-9]+)', (req, res, next) => {
     const id = +req.params.id;
     let courses = server.db.getState().courses;
-    if (id) {
-      let course = courses.find((value) => {
-        return id === value.id;
-      });
-      if (!course) {
-        res.status(401).send("Wrong id");
-      } else {
-        const newCourse = req.body;
-        console.log(newCourse);
-        courses.splice(courses.indexOf(course), 1, newCourse);
-        res.json(courses);
-      }
-    } else {
+    let course = courses.find((value) => {
+      return id === value.id;
+    });
+    if (!course) {
       res.status(401).send("Wrong id");
+    } else {
+      const newCourse = req.body;
+      courses.splice(courses.indexOf(course), 1, newCourse);
+      res.sendStatus(200);
     }
   });
 
   router.get('/courses/:id([0-9]+)', (req, res, next) => {
     const id = +req.params.id;
     let courses = server.db.getState().courses;
-    if (id) {
-      let course = courses.find((value) => {
-        return id === value.id;
-      });
-      if (!course) {
-        res.status(401).send("Wrong id");
-      } else {
-        res.json(course);
-      }
-    } else {
+
+    let course = courses.find((value) => {
+      return id === value.id;
+    });
+    if (!course) {
       res.status(401).send("Wrong id");
+    } else {
+      res.json(course);
     }
   });
 
   router.delete('/courses/:id([0-9]+)', (req, res, next) => {
     const id = +req.params.id;
     let courses = server.db.getState().courses;
-    if (id) {
-      let course = courses.find((value) => {
-        return id === value.id;
-      });
+
+    let course = courses.find((value) => {
+      return id === value.id;
+    });
+    if (course) {
       courses.splice(courses.indexOf(course), 1);
     }
-
-    res.json(courses);
+    res.sendStatus(200);
   });
 
 	return router;

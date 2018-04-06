@@ -1,27 +1,35 @@
-import { User } from './../../entities';
+import { Injectable } from '@angular/core';
+import { Http, Response, RequestOptions, RequestMethod, Request, Headers } from '@angular/http';
+import { Store } from '@ngrx/store';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
-import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, RequestMethod, Request, ResponseContentType, Headers } from '@angular/http';
+
+import { User } from './../../entities';
+import { AppState } from '../../../app.redux';
+import { STORE_USER, UNLOAD_USER } from './login-service-reducer';
 
 
 @Injectable()
 export class LoginService {
 
-  private userName: BehaviorSubject<string> = new BehaviorSubject(null);
   private token: string = null;
 
   get getToken(): string {
     return this.token;
   }
 
+  get getUserNameObs(): Observable<string> {
+    return this.store.select('login').select('name');
+  }
+
   private baseURL = 'http://localhost:3004';
 
-  constructor(private http: Http) { }
-
-  public get userNameObs(): Observable<string> {
-    return this.userName.asObservable();
+  constructor(private http: Http, private store: Store<AppState>) {
+    this.store.select('login').select('token').subscribe(token => {
+      this.token = token;
+    });
   }
 
   getUserInfo(): Observable<User> {
@@ -43,10 +51,6 @@ export class LoginService {
       });
   }
 
-  getUserName(): Observable<string> {
-    return this.userName.asObservable();
-  }
-
   login(login: string, password: string): Observable<void> {
     const requestOptions = new RequestOptions();
 
@@ -66,17 +70,15 @@ export class LoginService {
                 return res.json();
               })
               .map((user) => {
-                this.userName.next(login);
-                this.token = user.token + '';
+                this.store.dispatch({ type: STORE_USER, payload: { name: login, token: user.token }});
               });
   }
 
   logout() {
-    this.userName.next(null);
-    this.token = null;
+    this.store.dispatch({ type: UNLOAD_USER});
   }
 
   isAuthenticated(): boolean {
-    return this.userName.getValue() !== null && this.token !== null;
+    return this.token !== null;
   }
 }

@@ -1,16 +1,22 @@
+import { Store } from '@ngrx/store';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { AppState } from '../../app.redux';
+import { SAVE_COURSE, CANCEL_SAVING } from './add-course-reducer';
+
 import { AuthorsService, authorValidator } from './authors';
 import { CoursesService } from './../courses/courses-service';
 import { CourseItem } from './../../core/entities';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { dateValidator } from './date';
 import { durationValidator } from './duration';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-course',
   templateUrl: './add-course.component.html',
   styleUrls: ['./add-course.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddCourseComponent implements OnInit {
 
@@ -24,14 +30,15 @@ export class AddCourseComponent implements OnInit {
     public authorsServ: AuthorsService,
     private courseService: CoursesService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private store: Store<AppState>) { }
 
   ngOnInit() {
     this.route.params.subscribe((val) => {
       if (val.id) {
         this.courseService.getItem(+val.id).subscribe((course) => {
           const month = course.date.getMonth() + 1;
-          const day = course.date.getDate() + 1;
+          const day = course.date.getDate();
           this.formGroup.setValue({
             title: course.title,
             description: course.description,
@@ -64,12 +71,12 @@ export class AddCourseComponent implements OnInit {
       this.formGroup.value.description,
       !!this.isTopRated,
       this.formGroup.value.authors);
-      this.courseService.createUpdateCourse(course);
+    this.store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
     this.router.navigateByUrl('courses');
   }
 
   cancel() {
+    this.store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
     this.router.navigateByUrl('courses');
   }
-
 }

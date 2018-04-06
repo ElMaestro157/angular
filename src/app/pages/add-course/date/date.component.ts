@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit, Injector } from '@angular/core';
+import { Component, forwardRef, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -11,18 +11,22 @@ import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, FormGr
       useExisting: forwardRef(() => DateComponent),
       multi: true
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateComponent implements OnInit, ControlValueAccessor {
 
   formGroup: FormGroup;
   ngControl: NgControl;
 
-  constructor(private inj: Injector) {
+  constructor(private inj: Injector, private changeDetector: ChangeDetectorRef) {
     this.formGroup = new FormGroup({
       date: new FormControl('')
     });
-    this.formGroup.valueChanges.subscribe(data => this.onChange(this.value));
+    this.formGroup.valueChanges.subscribe(data => {
+      this.onChange(this.value);
+      this.changeDetector.markForCheck();
+    });
   }
 
   get value(): string {

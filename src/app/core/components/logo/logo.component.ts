@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { LoginService } from '../../services';
 import 'rxjs/add/observable/of';
@@ -14,17 +15,21 @@ import 'rxjs/add/observable/of';
 export class LogoComponent implements OnInit, OnDestroy {
 
   public LOGO = 'app/core/components/logo/logo.png';
-  private subscriber: Subscription;
+  private loginSubscriber: Subscription;
+  private routerSubscriber: Subscription;
   public logo: string;
 
-  constructor(private ref: ChangeDetectorRef, private loginService: LoginService, private router: Router, private route: ActivatedRoute) {
+  constructor(private ref: ChangeDetectorRef,
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.subscriber = this.loginService.userNameObs.subscribe((val) => {
+    this.loginSubscriber = this.loginService.getUserNameObs.subscribe(() => {
       this.ref.markForCheck();
     });
-    this.router.events.subscribe((events) => {
+    this.routerSubscriber = this.router.events.subscribe((events) => {
       if (events instanceof NavigationStart) {
         this.logo = events.url.split('/')[1].toUpperCase();
       }
@@ -32,7 +37,8 @@ export class LogoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriber.unsubscribe();
+    this.loginSubscriber.unsubscribe();
+    this.routerSubscriber.unsubscribe();
   }
 
   logoff() {
@@ -45,7 +51,7 @@ export class LogoComponent implements OnInit, OnDestroy {
   }
 
   getUserName(): Observable<string> {
-    return this.loginService.getUserName();
+    return this.loginService.getUserNameObs;
   }
 
   getCourseName(): Observable<string> {

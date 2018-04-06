@@ -1,5 +1,5 @@
-import { CourseItem } from './../../../core/entities';
 import { Pipe, PipeTransform } from '@angular/core';
+import { CourseItem } from './../../../core/entities';
 
 @Pipe({
   name: 'coursesOrderBy'

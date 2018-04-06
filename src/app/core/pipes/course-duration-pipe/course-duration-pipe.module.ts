@@ -1,6 +1,6 @@
-import { CourseDurationPipe } from './course-duration.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CourseDurationPipe } from './course-duration.pipe';
 
 @NgModule({
   imports: [

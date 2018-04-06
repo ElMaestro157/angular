@@ -1,4 +1,3 @@
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -22,10 +21,9 @@ import { CanActivateService } from '../../core/services';
     CourseModule,
     LoaderBlockModule,
     NoDataModule,
-    CoursesOrderByPipeModule,
-    HttpModule
+    CoursesOrderByPipeModule
   ],
-  providers: [CanActivateService, CoursesService, HttpModule],
+  providers: [CanActivateService, CoursesService],
   declarations: [CoursesComponent],
   exports: [CoursesComponent]
 })

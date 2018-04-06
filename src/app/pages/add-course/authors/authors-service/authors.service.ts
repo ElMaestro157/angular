@@ -1,5 +1,6 @@
-import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
+import { Http, Response, RequestOptions, RequestMethod, Request } from '@angular/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs/Observable';
 import { CourseItem } from '../../../../core/entities';
 
