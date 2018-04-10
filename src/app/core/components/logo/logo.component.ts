@@ -1,9 +1,9 @@
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { LoginService } from '../../services';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { LoginService } from '../../services';
 import 'rxjs/add/observable/of';
 
 @Component({
@@ -52,10 +52,6 @@ export class LogoComponent implements OnInit, OnDestroy {
 
   getUserName(): Observable<string> {
     return this.loginService.getUserNameObs;
-  }
-
-  getCourseName(): Observable<string> {
-    return new Observable();
   }
 
   isAuthenticated(): boolean {

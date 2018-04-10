@@ -48,7 +48,8 @@ export class LoginService {
           throw new Error(res.statusText);
         }
         return res.json();
-      });
+      })
+      .map((user) => this.map(user));
   }
 
   login(login: string, password: string): Observable<void> {
@@ -80,5 +81,9 @@ export class LoginService {
 
   isAuthenticated(): boolean {
     return this.token !== null;
+  }
+
+  private map(user: any): User {
+    return new User(user.id, user.name, user.login, user.password, user.fakeToken);
   }
 }

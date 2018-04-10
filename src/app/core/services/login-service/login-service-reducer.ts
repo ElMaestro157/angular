@@ -22,12 +22,12 @@ const initialState: LoginStore = {
 export const reducer: ActionReducer<LoginStore, LoginAction> = (state = initialState, action: LoginAction): LoginStore => {
   switch (action.type) {
     case STORE_USER:
-      return Object.assign({}, action.payload);
+      return action.payload;
 
     case UNLOAD_USER:
       state.name = null;
       state.token = null;
-      return Object.assign({}, state);
+      return state;
 
     default:
       return state;

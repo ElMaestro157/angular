@@ -1,4 +1,3 @@
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToolboxComponent } from './toolbox.component';
@@ -9,9 +8,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule
   ],
-  providers: [CoursesService, HttpModule],
+  providers: [CoursesService],
   declarations: [ToolboxComponent],
   exports: [ToolboxComponent]
 })
