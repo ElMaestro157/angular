@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { CourseItem } from '../../core/entities';
 import { CoursesService } from './courses-service';
 import { LoaderBlockServiceService } from '../../core/services';
+import { CourseItem } from '../../core/entities';
 
 @Component({
   selector: 'app-courses',

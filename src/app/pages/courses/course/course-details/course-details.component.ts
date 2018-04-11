@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CourseItem } from '../../../../core/entities';
 
 @Component({
@@ -7,13 +7,10 @@ import { CourseItem } from '../../../../core/entities';
   styleUrls: ['./course-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CourseDetailsComponent implements OnInit {
+export class CourseDetailsComponent {
 
   @Input() course: CourseItem;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

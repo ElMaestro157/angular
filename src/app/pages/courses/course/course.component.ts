@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CourseItem } from '../../../core/entities';
 
 @Component({
@@ -8,7 +8,7 @@ import { CourseItem } from '../../../core/entities';
   styleUrls: ['./course.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CourseComponent implements OnInit {
+export class CourseComponent {
   @Input() course: CourseItem;
 
   @Output() deleteEvent = new EventEmitter<CourseItem>();
@@ -23,9 +23,6 @@ export class CourseComponent implements OnInit {
 
   edit() {
     this.router.navigate(['/courses', this.course.id]);
-  }
-
-  ngOnInit() {
   }
 
 }

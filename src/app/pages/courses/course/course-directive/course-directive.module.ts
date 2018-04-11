@@ -1,6 +1,6 @@
-import { CourseDateDirective } from './course.directive';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CourseDateDirective } from './course.directive';
 
 @NgModule({
   imports: [

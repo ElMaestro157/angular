@@ -7,7 +7,6 @@ import { CourseDurationPipeModule } from '../../../core/pipes';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     CourseDurationPipeModule
   ],

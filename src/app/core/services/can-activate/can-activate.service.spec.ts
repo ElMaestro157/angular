@@ -2,8 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { CanActivateService } from './can-activate.service';
-import { LoginService } from '..';
-import { LoginServiceMock } from '../../components/mocks';
+import { LoginService, LoginServiceMock } from '..';
 
 const routerState = jasmine.createSpyObj<RouterStateSnapshot>('RouterStateSnapshot', ['toString']);
 

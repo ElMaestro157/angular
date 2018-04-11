@@ -1,8 +1,8 @@
 export class Author {
   constructor (
-    public id: number,
-    public firstName: string,
-    public lastName: string
+    private id: number,
+    private firstName: string,
+    private lastName: string
   ) {
     if (!id || id < 0) {
       throw new Error('Invalid id found!');
@@ -17,15 +17,15 @@ export class Author {
     }
   }
 
-  // public get getId(): number {
-  //   return this.id;
-  // }
+  public get getId(): number {
+    return this.id;
+  }
 
-  // public get getFirstName(): string {
-  //   return this.firstName;
-  // }
+  public get getFirstName(): string {
+    return this.firstName;
+  }
 
-  // public get getLastName(): string {
-  //   return this.lastName;
-  // }
+  public get getLastName(): string {
+    return this.lastName;
+  }
 }

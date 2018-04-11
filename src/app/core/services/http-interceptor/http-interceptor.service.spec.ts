@@ -1,8 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { HttpInterceptorService } from './http-interceptor.service';
-import { LoginService } from '..';
-import { LoginServiceMock } from '../../components/mocks';
+import { LoginService, LoginServiceMock } from '..';
 
 describe('HttpInterceptorService', () => {
   beforeEach(() => {

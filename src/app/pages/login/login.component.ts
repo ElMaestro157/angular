@@ -1,7 +1,7 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { LoginService, LoaderBlockServiceService } from '../../core/services';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginService, LoaderBlockServiceService } from '../../core/services';
 
 @Component({
   selector: 'app-login',

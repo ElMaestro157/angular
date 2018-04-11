@@ -1,20 +1,20 @@
-import { DELETE_COURSE } from './../courses-redux-reducer';
-import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
+
+import { Store } from '@ngrx/store';
+import { DELETE_COURSE } from './../courses-redux-reducer';
+import { AppState } from '../../../app.redux';
+import { SET_LIST, ADD_COURSE, EDIT_COURSE } from '../courses-redux-reducer';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/skip';
 
-import { AppState } from '../../../app.redux';
-import { SET_LIST, ADD_COURSE, EDIT_COURSE } from '../courses-redux-reducer';
 import { CourseItem, Author } from './../../../core/entities';
 
 @Injectable()
 export class CoursesService {
 
-  // public courselist: BehaviorSubject<CourseItem[]> = new BehaviorSubject([]);
   private baseURL = 'http://localhost:3004';
   private pages = new BehaviorSubject<number>(1);
   private search = new BehaviorSubject<string>(null);
@@ -161,9 +161,9 @@ export class CoursesService {
   private mapAuthorsReverse(authors: Author[]): any[] {
     return authors.map((value) => {
       return {
-        id: value.id,
-        firstName: value.firstName,
-        lastName: value.lastName
+        id: value.getId,
+        firstName: value.getFirstName,
+        lastName: value.getLastName
       };
     });
   }

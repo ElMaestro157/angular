@@ -23,7 +23,6 @@ export class AddCourseComponent implements OnInit {
   private id: number = null;
   private isTopRated: boolean = null;
   formGroup: FormGroup;
-  authors: string[];
 
   constructor(private formBuilder: FormBuilder,
     private changeDetector: ChangeDetectorRef,

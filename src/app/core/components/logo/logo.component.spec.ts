@@ -8,8 +8,7 @@ import { LogoComponent } from './logo.component';
 import { FooterModule } from '..';
 import { CoursesModule, AddCourseModule, LoginModule, NoContentModule } from '../../../pages';
 
-import { LoginServiceMock } from '../mocks';
-import { LoginService } from '../../services';
+import { LoginService, LoginServiceMock } from '../../services';
 
 describe('LogoComponent', () => {
   let component: LogoComponent;

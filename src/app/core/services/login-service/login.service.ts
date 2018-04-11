@@ -10,7 +10,6 @@ import { User } from './../../entities';
 import { AppState } from '../../../app.redux';
 import { STORE_USER, UNLOAD_USER } from './login-service-reducer';
 
-
 @Injectable()
 export class LoginService {
 
@@ -21,14 +20,14 @@ export class LoginService {
   }
 
   get getUserNameObs(): Observable<string> {
-    return this.store.select('login').select('name');
+    return this.store.select('user').map(user => user ? user.getName.first + ' ' + user.getName.last : null);
   }
 
   private baseURL = 'http://localhost:3004';
 
   constructor(private http: Http, private store: Store<AppState>) {
-    this.store.select('login').select('token').subscribe(token => {
-      this.token = token;
+    this.store.select('user').subscribe(user => {
+      this.token = user ? user.getToken : null;
     });
   }
 
@@ -70,8 +69,9 @@ export class LoginService {
                 }
                 return res.json();
               })
-              .map((user) => {
-                this.store.dispatch({ type: STORE_USER, payload: { name: login, token: user.token }});
+              .map(({token}) => {
+                this.token = token;
+                this.getUserInfo().subscribe((user) => this.store.dispatch({ type: STORE_USER, payload: user }));
               });
   }
 

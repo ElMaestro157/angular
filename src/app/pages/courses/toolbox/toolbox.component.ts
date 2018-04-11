@@ -8,14 +8,11 @@ import { CoursesService } from '../courses-service';
   styleUrls: ['./toolbox.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToolboxComponent implements OnInit {
+export class ToolboxComponent {
 
   value = '';
 
   constructor(private router: Router, private courseService: CoursesService) {
-  }
-
-  ngOnInit() {
   }
 
   onClick() {
@@ -25,4 +22,5 @@ export class ToolboxComponent implements OnInit {
   createCourse() {
     this.router.navigate(['courses', 'new']);
   }
+
 }

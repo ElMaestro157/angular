@@ -2,7 +2,7 @@ import { Http, Response, RequestOptions, RequestMethod, Request } from '@angular
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { CourseItem } from '../../../../core/entities';
+import { CourseItem, Author } from '../../../../core/entities';
 
 @Injectable()
 export class AuthorsService {
@@ -11,7 +11,7 @@ export class AuthorsService {
 
   constructor(private http: Http) { }
 
-  getAuthors(course?: CourseItem): Observable<string[]> {
+  getAuthors(course?: CourseItem): Observable<Author[]> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
     requestOptions.url = this.baseURL + '/courses';
@@ -25,6 +25,10 @@ export class AuthorsService {
 
     return this.http.request(request)
           .map((res) => res.json())
-          .map(value => course ? value.authors : value);
+          .map(value => course ? this.mapAuthors(value.authors) : this.mapAuthors(value));
+  }
+
+  private mapAuthors(authors: any[]): Author[] {
+    return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
   }
 }

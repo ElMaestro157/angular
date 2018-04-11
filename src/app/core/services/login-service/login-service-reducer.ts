@@ -1,4 +1,5 @@
 import { Action, ActionReducer } from '@ngrx/store';
+import { User } from '../../entities';
 
 export const STORE_USER = '[AUTH] Store user';
 export const UNLOAD_USER = '[AUTH] Unload user';
@@ -6,27 +7,16 @@ export const UNLOAD_USER = '[AUTH] Unload user';
 class LoginAction implements Action {
   type: string;
 
-  constructor(public payload?: LoginStore) { }
+  constructor(public payload?: User) { }
 }
 
-export interface LoginStore {
-  name: string;
-  token: string;
-}
-
-const initialState: LoginStore = {
-  name: null,
-  token: null
-};
-
-export const reducer: ActionReducer<LoginStore, LoginAction> = (state = initialState, action: LoginAction): LoginStore => {
+export const reducer: ActionReducer<User, LoginAction> = (state = null, action: LoginAction): User => {
   switch (action.type) {
     case STORE_USER:
       return action.payload;
 
     case UNLOAD_USER:
-      state.name = null;
-      state.token = null;
+      state = null;
       return state;
 
     default:

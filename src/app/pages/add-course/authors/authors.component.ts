@@ -34,8 +34,8 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
   ngOnInit() {
     this.subscriber = this.authors.subscribe((authors) => {
       if (this.value !== []) {
-        const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.id));
-        this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.id));
+        const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.getId));
+        this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.getId));
       } else {
         this.allAuthors = authors;
       }

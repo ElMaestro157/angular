@@ -5,12 +5,12 @@ describe('Author', () => {
     expect(new Author(1, 'first', 'last')).toBeTruthy();
   });
 
-  // it('should correctly return its values', () => {
-  //   const author = new Author(1, 'first', 'last');
-  //   expect(author.id).toBe(1);
-  //   expect(author.getFirstName).toBe('first');
-  //   expect(author.getLastName).toBe('last');
-  // });
+  it('should correctly return its values', () => {
+    const author = new Author(1, 'first', 'last');
+    expect(author.getId).toBe(1);
+    expect(author.getFirstName).toBe('first');
+    expect(author.getLastName).toBe('last');
+  });
 
   it('should throw error at non-positive or null id', () => {
     expect(() => new Author(-1, 'first', 'last')).toThrowError();

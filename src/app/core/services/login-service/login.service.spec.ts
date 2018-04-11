@@ -7,7 +7,6 @@ import { StoreModule, Store } from '@ngrx/store';
 import { reducers, AppState } from './../../../app.redux';
 import { STORE_USER, UNLOAD_USER } from './login-service-reducer';
 
-
 import { LoginService } from './login.service';
 
 describe('LoginService', () => {
