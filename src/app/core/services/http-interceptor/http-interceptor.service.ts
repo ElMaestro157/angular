@@ -1,17 +1,36 @@
-import { Injectable, Injector } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptionsArgs, Request, Response, RequestOptions, XHRBackend } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { LoginService } from './../login-service';
 
 @Injectable()
-export class HttpInterceptorService implements HttpInterceptor {
+export class HttpInterceptorService extends Http {
 
-  constructor(private auth: LoginService) {}
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const authReq = req.clone( {headers: req.headers.set('Authorization', this.auth.getToken) });
-    return next.handle(authReq);
+  constructor(protected _backend: XHRBackend, protected _defaultOptions: RequestOptions) {
+    super(_backend, _defaultOptions);
   }
 
+  _setCustomHeaders(options?: RequestOptionsArgs): RequestOptionsArgs {
+    if (!options) {
+      options = new RequestOptions({});
+    }
+    if (sessionStorage.getItem('id_token')) {
+      if (!options.headers) {
+        options.headers = new Headers();
+      }
+      options.headers.set('Authorization', JSON.parse(sessionStorage.getItem('user')).token);
+    }
+    return options;
+  }
+
+
+  request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
+    if (url instanceof Request) {
+      if (sessionStorage.getItem('user') && sessionStorage.getItem('user') !== 'null') {
+        url.headers.set('Authorization', JSON.parse(sessionStorage.getItem('user')).token);
+      }
+      return super.request(url);
+    }
+    options = this._setCustomHeaders(options);
+    return super.request(url, options);
+  }
 }

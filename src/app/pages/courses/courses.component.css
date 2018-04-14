@@ -6,6 +6,16 @@ app-loader-block {
   margin: auto;
 }
 
+.main {
+  overflow: hidden;
+}
+
+.courses {
+  overflow-y: auto;
+  border-radius: 5px;
+  height: 36rem;
+}
+
 .button-add {
   margin-top: 5%;
   text-align: center;
@@ -14,4 +24,36 @@ app-loader-block {
 .btn {
   font-weight: 600;
   width: 300px;
+}
+
+.scrollbar-morpheus-den::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #F5F5F5;
+  border-radius: 10px;
+}
+
+.scrollbar-morpheus-den::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+.scrollbar-morpheus-den::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#30cfd0), to(#330867));
+  background-image: -webkit-linear-gradient(bottom, #30cfd0 0%, #330867 100%);
+  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+}
+
+.bordered-indigo::-webkit-scrollbar-track {
+  -webkit-box-shadow: none;
+  border: 1px solid #3f51b5;
+}
+
+.bordered-indigo::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: none;
+}
+
+.thin::-webkit-scrollbar {
+  width: 6px;
 }

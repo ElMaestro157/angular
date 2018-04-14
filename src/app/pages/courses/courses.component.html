@@ -1,7 +1,11 @@
-<app-toolbox></app-toolbox>
-<app-loader-block></app-loader-block>
-<app-no-data *ngIf="isEmpty()"></app-no-data>
-<app-course *ngFor="let course of courses | coursesOrderBy" [course]="course" (deleteEvent)="onItemDelete($event)"></app-course>
-<div class="button-add">
-  <button class="btn btn-primary" (click)="addMore()">Add more</button>
+<div class="main">
+  <app-toolbox></app-toolbox>
+  <app-loader-block></app-loader-block>
+  <app-no-data *ngIf="isEmpty()"></app-no-data>
+  <div class="courses scrollbar-morpheus-den bordered-indigo thin">
+    <app-course *ngFor="let course of courses | coursesOrderBy" [course]="course" (deleteEvent)="onItemDelete($event)"></app-course>
+    <div class="button-add">
+      <button class="btn btn-primary" (click)="addMore()">Add more</button>
+    </div>
+  </div>
 </div>

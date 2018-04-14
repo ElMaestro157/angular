@@ -52,6 +52,10 @@ export class CoursesService {
     });
   }
 
+  resetSearch() {
+    this.search.next('');
+  }
+
   increasePages() {
     this.start += this.count;
     this.length > this.start

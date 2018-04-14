@@ -11,7 +11,7 @@
   <div class="form-group row">
     <label class="col-2 col-form-label" for="description">Description</label>
     <div class="col-8">
-      <textarea class="form-control input description-area" [ngClass]="{ 'is-invalid': formGroup.get('description')?.invalid }" formControlName="description"></textarea>
+      <textarea class="form-control input description-area scrollbar-morpheus-den bordered-indigo thin" [ngClass]="{ 'is-invalid': formGroup.get('description')?.invalid }" formControlName="description"></textarea>
     </div>
     <div class="invalid" *ngIf="formGroup.get('description')?.invalid && formGroup.get('description').touched && formGroup.get('description').value === ''">
       * required

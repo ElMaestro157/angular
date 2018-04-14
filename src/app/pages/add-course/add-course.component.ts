@@ -71,11 +71,13 @@ export class AddCourseComponent implements OnInit {
       !!this.isTopRated,
       this.formGroup.value.authors);
     this.store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
+    this.courseService.resetSearch();
     this.router.navigateByUrl('courses');
   }
 
   cancel() {
     this.store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
+    this.courseService.resetSearch();
     this.router.navigateByUrl('courses');
   }
 }
