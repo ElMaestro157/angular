@@ -19,6 +19,7 @@ export class LoginService {
     return this.token;
   }
 
+  // Observable for user's name for LogoComponent
   get getUserNameObs(): Observable<string> {
     return this.store.select('user').map(user => user ? user.getName.first + ' ' + user.getName.last : null);
   }
@@ -26,11 +27,20 @@ export class LoginService {
   private baseURL = 'http://localhost:3004';
 
   constructor(private http: Http, private store: Store<AppState>) {
+    // Getting user from sessionStorage, if exists
+    const temp = JSON.parse(sessionStorage.getItem('user'));
+    if (temp) {
+      this.store.dispatch({ type: STORE_USER, payload: new User(temp.id, temp.name, temp.login, temp.password, temp.token) });
+    }
+
+    // Subscribing on user's changes
     this.store.select('user').subscribe(user => {
       this.token = user ? user.getToken : null;
+      sessionStorage.setItem('user', JSON.stringify(user));
     });
   }
 
+  // Request to server for user's info
   getUserInfo(): Observable<User> {
     const headers = new Headers();
     headers.append('Authorization', this.token);
@@ -51,6 +61,7 @@ export class LoginService {
       .map((user) => this.map(user));
   }
 
+  // Reqeust to server for loggging
   login(login: string, password: string): Observable<void> {
     const requestOptions = new RequestOptions();
 
@@ -83,6 +94,7 @@ export class LoginService {
     return this.token !== null;
   }
 
+  // Mapping objects to User type
   private map(user: any): User {
     return new User(user.id, user.name, user.login, user.password, user.fakeToken);
   }

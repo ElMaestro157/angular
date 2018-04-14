@@ -14,48 +14,48 @@ import 'rxjs/add/observable/of';
 })
 export class LogoComponent implements OnInit, OnDestroy {
 
-  public LOGO = 'app/core/components/logo/logo.png';
-  private loginSubscriber: Subscription;
-  private routerSubscriber: Subscription;
-  public logo: string;
+  public logo: string; // Breadcrumb
 
-  constructor(private ref: ChangeDetectorRef,
-    private loginService: LoginService,
-    private router: Router,
-    private route: ActivatedRoute) {
+  private _loginSubscriber: Subscription;
+  private _routerSubscriber: Subscription;
+
+  constructor(private _ref: ChangeDetectorRef,
+    private _loginService: LoginService,
+    private _router: Router) {
   }
 
   ngOnInit() {
-    this.loginSubscriber = this.loginService.getUserNameObs.subscribe(() => {
-      this.ref.markForCheck();
+    this._loginSubscriber = this._loginService.getUserNameObs.subscribe(() => {
+      this._ref.markForCheck();
     });
-    this.routerSubscriber = this.router.events.subscribe((events) => {
+    this._routerSubscriber = this._router.events.subscribe((events) => {
       if (events instanceof NavigationStart) {
         this.logo = events.url.split('/')[1].toUpperCase();
+        this._ref.markForCheck();
       }
     });
   }
 
   ngOnDestroy() {
-    this.loginSubscriber.unsubscribe();
-    this.routerSubscriber.unsubscribe();
+    this._loginSubscriber.unsubscribe();
+    this._routerSubscriber.unsubscribe();
   }
 
   logoff() {
-    this.loginService.logout();
-    this.router.navigateByUrl('/login');
+    this._loginService.logout();
+    this._router.navigateByUrl('/login');
   }
 
   breadCrumbClick() {
-    this.router.navigateByUrl(`${this.logo.toLowerCase()}`);
+    this._router.navigateByUrl(`${this.logo.toLowerCase()}`);
   }
 
   getUserName(): Observable<string> {
-    return this.loginService.getUserNameObs;
+    return this._loginService.getUserNameObs;
   }
 
   isAuthenticated(): boolean {
-    return this.loginService.isAuthenticated();
+    return this._loginService.isAuthenticated();
   }
 
 }

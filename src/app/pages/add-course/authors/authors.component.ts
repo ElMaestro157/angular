@@ -26,7 +26,7 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
 
   private subscriber: Subscription;
 
-  selected = [0, 0];
+  selected = [0, 0]; // First - selected index for selected, second - for all authors' lists
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }

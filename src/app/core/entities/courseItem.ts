@@ -12,7 +12,7 @@ export class CourseItem implements Course {
     public topRated: boolean,
     public authors: Author[]
   ) {
-    if (!id || id < 0) {
+    if (id && id < 0) {
       throw new Error('Invalid id found!');
     }
 

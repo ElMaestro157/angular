@@ -37,4 +37,6 @@
 
 .logoff {
   align-self: flex-end;
+  cursor: pointer;
+  text-decoration: underline;
 }

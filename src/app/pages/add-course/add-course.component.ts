@@ -20,8 +20,8 @@ import { durationValidator } from './duration';
 })
 export class AddCourseComponent implements OnInit {
 
-  private id: number = null;
-  private isTopRated: boolean = null;
+  private id: number = null; // If course exists (clicked edit course)
+  private isTopRated: boolean = null; // If course exists (clicked edit course)
   formGroup: FormGroup;
 
   constructor(private formBuilder: FormBuilder,

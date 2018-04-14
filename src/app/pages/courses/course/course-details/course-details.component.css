@@ -24,10 +24,10 @@
 
 .duration-star {
   display: flex;
-  align-items: center;
 }
 
 .star {
+  color: yellow;
   height: 1.1rem;
   width: 1.1rem;
 }

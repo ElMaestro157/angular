@@ -4,6 +4,7 @@ const url = require('url');
 
 module.exports = (server) => {
 
+  // Matching login and password and returning token, if matches
 	router.post('/auth/login', (req, res, next) => {
 		let users = server.db.getState().users,
 			matchedUser = users.find((user) => {
@@ -19,6 +20,7 @@ module.exports = (server) => {
 		}
 	});
 
+  // Getting user's info on token
 	router.post('/auth/userinfo', (req, res, next) => {
 		let users = server.db.getState().users,
 			matchedUser = users.find((user) => {

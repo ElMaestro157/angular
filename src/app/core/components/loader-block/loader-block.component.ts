@@ -10,25 +10,25 @@ import { LoaderBlockServiceService } from '../../services';
 })
 export class LoaderBlockComponent implements OnInit, OnDestroy {
 
-  private show: boolean;
-  private subscriber: Subscription;
+  private _show: boolean; // Boolean value of showing loader
+  private _subscriber: Subscription;
 
-  constructor(private ref: ChangeDetectorRef, private loaderService: LoaderBlockServiceService) {
+  constructor(private _ref: ChangeDetectorRef, private _loaderService: LoaderBlockServiceService) {
   }
 
   ngOnInit() {
-    this.subscriber = this.loaderService.getShow.subscribe((val) => {
-      this.show = val;
-      this.ref.markForCheck();
+    this._subscriber = this._loaderService.getShow.subscribe((val) => {
+      this._show = val;
+      this._ref.markForCheck();
     });
   }
 
   ngOnDestroy() {
-    this.subscriber.unsubscribe();
+    this._subscriber.unsubscribe();
   }
 
   isShowed(): boolean {
-    return this.show;
+    return this._show;
   }
 
 }

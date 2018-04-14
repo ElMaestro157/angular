@@ -13,7 +13,7 @@ import { CourseItem } from '../../core/entities';
 })
 export class CoursesComponent implements OnInit, OnDestroy {
 
-  courses: CourseItem[];
+  courses: CourseItem[]; // Courses' list
   private subscriber: Subscription;
 
   constructor(private changeDetector: ChangeDetectorRef,

@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
 
 import { Store } from '@ngrx/store';
-import { DELETE_COURSE } from './../courses-redux-reducer';
 import { AppState } from '../../../app.redux';
-import { SET_LIST, ADD_COURSE, EDIT_COURSE } from '../courses-redux-reducer';
+import { SET_LIST, ADD_COURSE, EDIT_COURSE, DELETE_COURSE, PUSH_LIST } from '../courses-redux-reducer';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -16,22 +15,31 @@ import { CourseItem, Author } from './../../../core/entities';
 export class CoursesService {
 
   private baseURL = 'http://localhost:3004';
-  private pages = new BehaviorSubject<number>(1);
-  private search = new BehaviorSubject<string>(null);
+  private count = 10; // Number of courses to load
+
+  private startObs = new BehaviorSubject<number>(0); // Observable for start number
+  private start = 0; // Start number
+  private search = new BehaviorSubject<string>(null); // Search line
+  private length = Infinity; // Length of courses
+
+  get getList(): Observable<CourseItem[]> {
+    return this.store.select('courses');
+  }
 
   constructor(private http: Http, private store: Store<AppState>) {
-    this.pages.subscribe((val) => {
+    this.startObs.subscribe((val) => {
       this.getListFromServer(val).subscribe((courses) => {
-        this.store.dispatch({ type: SET_LIST, payload: courses });
+        this.store.dispatch({ type: PUSH_LIST, payload: courses });
       });
     });
 
     this.search.skip(1).subscribe((val) => {
-      this.getListFromServer(0, val).subscribe((courses) => {
+      this.getListFromServer(this.start, val).subscribe((courses) => {
         this.store.dispatch({ type: SET_LIST, payload: courses });
       });
     });
 
+    // Subscribing on changes from redux course's state for updating list
     this.store.select('addEditCourse').skip(1).subscribe((course) => {
       this.createUpdateCourseFromServer(course).subscribe((res) => {
         if (+res || res === '0') {
@@ -44,12 +52,50 @@ export class CoursesService {
     });
   }
 
-  get getList(): Observable<CourseItem[]> {
-    return this.store.select('courses');
+  increasePages() {
+    this.start += this.count;
+    this.length > this.start
+      ? this.search.value
+          ? this.search.next(this.search.value)
+          : this.startObs.next(this.start)
+      : this.start -= this.count;
   }
 
-  increasePages() {
-    this.pages.next(this.pages.value + 1);
+  filter(value: string) {
+    this.start = 0;
+    this.search.next(value);
+  }
+
+  removeItem(item: CourseItem) {
+    this.deleteFromServer(item.id).subscribe((courses) => {
+      this.start -= 1;
+      this.length -= 1;
+      this.store.dispatch({ type: DELETE_COURSE, payload: item });
+    });
+  }
+
+  getItem(id: number): Observable<CourseItem> {
+    const requestOptions = new RequestOptions();
+    requestOptions.method = RequestMethod.Get;
+    requestOptions.url = this.baseURL + '/courses/' + id;
+
+    const request = new Request(requestOptions);
+    return this.http.request(request)
+      .map((res) => res.json())
+      .map((value) => this.map(value));
+  }
+
+  filterOutdated() {
+    const date = new Date();
+    date.setDate(date.getDate() - 14);
+
+    this.store.select('courses').subscribe(courses => {
+      this.store.dispatch({
+        type: SET_LIST, payload: courses.filter((val) => {
+          return val.date >= date;
+        })
+      });
+    });
   }
 
   private getListFromServer(pages: number = 0, query?: string): Observable<CourseItem[]> {
@@ -57,10 +103,12 @@ export class CoursesService {
     requestOptions.method = RequestMethod.Get;
     requestOptions.url = this.baseURL + '/courses';
     requestOptions.params = new URLSearchParams();
-    requestOptions.params.set('start', '0');
     if (pages) {
-      requestOptions.params.set('count', pages * 10 + '');
+      requestOptions.params.set('start', pages + '');
+    } else {
+      requestOptions.params.set('start', '0');
     }
+    requestOptions.params.set('count', `${this.count}`);
     if (query) {
       requestOptions.params.set('query', query);
     }
@@ -69,7 +117,8 @@ export class CoursesService {
     return this.http.request(request)
               .map((res) => res.json())
               .map((coursesObj) => {
-                return Array.from(coursesObj).map((obj) => this.map(obj));
+                this.length = coursesObj.length;
+                return Array.from(coursesObj.courses).map((obj) => this.map(obj));
               });
   }
 
@@ -94,44 +143,6 @@ export class CoursesService {
     const request = new Request(requestOptions);
     return this.http.request(request)
                 .map(res => res.text());
-  }
-
-
-  getItem(id: number): Observable<CourseItem> {
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.baseURL + '/courses/' + id;
-
-    const request = new Request(requestOptions);
-    return this.http.request(request)
-      .map((res) => res.json())
-      .map((value) => this.map(value));
-  }
-
-  removeItem(item: CourseItem) {
-    this.deleteFromServer(item.id).subscribe((courses) => {
-      this.store.dispatch({ type: DELETE_COURSE, payload: item });
-    });
-  }
-
-  filter(value: string) {
-    if (value) {
-      this.search.next(value);
-    } else {
-      this.pages.next(this.pages.value);
-    }
-  }
-
-  filterOutdated() {
-    const date = new Date();
-    date.setDate(date.getDate() - 14);
-
-    this.store.select('courses').subscribe(courses => {
-      this.store.dispatch({
-        type: SET_LIST, payload: courses.filter((val) => {
-          return val.date >= date;
-        })});
-    });
   }
 
   private map(val: any): CourseItem {

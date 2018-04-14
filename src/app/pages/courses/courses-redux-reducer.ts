@@ -5,6 +5,7 @@ export const SET_LIST = '[COURSES] Set courses list';
 export const DELETE_COURSE = '[COURSES] Delete course from list';
 export const EDIT_COURSE = '[COURSES] Edit course';
 export const ADD_COURSE = '[COURSES] Add new course';
+export const PUSH_LIST = '[COURSES] Push new courses';
 
 class CoursesAction implements Action {
   type: string;
@@ -12,8 +13,8 @@ class CoursesAction implements Action {
   constructor(public payload: any) { }
 }
 
-class SetCoursesAction extends CoursesAction {
-  type = SET_LIST;
+class SetPushCoursesAction extends CoursesAction {
+  type: string;
 
   constructor (public payload: CourseItem[]) { super(payload); }
 }
@@ -28,6 +29,10 @@ export const reducer: ActionReducer<CourseItem[], CoursesAction> = (state = [], 
   switch (action.type) {
     case SET_LIST:
       return action.payload;
+
+    case PUSH_LIST:
+      state.push(...action.payload);
+      return state.slice();
 
     case DELETE_COURSE:
       let course = state.find(val => val.id === action.payload.id );

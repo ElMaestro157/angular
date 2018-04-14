@@ -1,12 +1,16 @@
 .main {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+}
+
+.list {
+  min-width: 17rem;
 }
 
 .list-group {
   overflow-y: scroll;
-  height: 200px;
+  height: 17rem;
+  width: 17rem;
 }
 
 .list-group-item {
@@ -18,16 +22,11 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 200px;
+  height: 17rem;
+  margin-right: 10%;
+  margin-left: 10%;
 }
 
 .active {
   color: white;
-}
-
-.icon {
-  height: 20px;
-  width: 20px;
-  min-height: 10px;
-  min-width: 10px;
 }
