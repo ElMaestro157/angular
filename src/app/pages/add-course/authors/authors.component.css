@@ -5,6 +5,7 @@
 
 .list {
   min-width: 17rem;
+  height: 17rem;
 }
 
 .list-group {
@@ -29,6 +30,10 @@
 
 .active {
   color: white;
+}
+
+.is-invalid {
+  border: 1px solid red;
 }
 
 .scrollbar-morpheus-den::-webkit-scrollbar-track {

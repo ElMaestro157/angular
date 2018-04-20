@@ -14,37 +14,41 @@ import { CourseItem } from '../../core/entities';
 export class CoursesComponent implements OnInit, OnDestroy {
 
   courses: CourseItem[]; // Courses' list
-  private subscriber: Subscription;
+  private _subscriber: Subscription;
 
-  constructor(private changeDetector: ChangeDetectorRef,
-              private coursesService: CoursesService,
-              private loaderService: LoaderBlockServiceService
+  constructor(private _changeDetector: ChangeDetectorRef,
+              private _coursesService: CoursesService,
+              private _loaderService: LoaderBlockServiceService
             ) { }
 
   ngOnInit() {
-    this.subscriber = this.coursesService.getList.subscribe((val) => {
+    this._subscriber = this._coursesService.getList.subscribe((val) => {
       this.courses = val;
-      this.changeDetector.markForCheck();
+      this._changeDetector.markForCheck();
     });
   }
 
   ngOnDestroy() {
-    this.subscriber.unsubscribe();
+    this._subscriber.unsubscribe();
   }
 
   addMore() {
-    this.coursesService.increasePages();
+    this._coursesService.increasePages();
   }
 
   onItemDelete(course: CourseItem) {
-    this.loaderService.show();
-    this.coursesService.removeItem(course);
+    this._loaderService.show();
     setTimeout(() => {
-      this.loaderService.hide();
+      this._loaderService.hide();
     }, 0);
+    this._coursesService.removeItem(course);
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.courses.length === 0;
+  }
+
+  isLoaded(): boolean {
+    return this._coursesService.isFullyLoaded();
   }
 }

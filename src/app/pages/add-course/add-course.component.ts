@@ -6,11 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../app.redux';
 import { SAVE_COURSE, CANCEL_SAVING } from './add-course-reducer';
 
-import { AuthorsService, authorValidator } from './authors';
+import { AuthorsService } from './authors';
 import { CoursesService } from './../courses/courses-service';
 import { CourseItem } from './../../core/entities';
-import { dateValidator } from './date';
-import { durationValidator } from './duration';
 
 @Component({
   selector: 'app-add-course',
@@ -20,22 +18,23 @@ import { durationValidator } from './duration';
 })
 export class AddCourseComponent implements OnInit {
 
-  private id: number = null; // If course exists (clicked edit course)
-  private isTopRated: boolean = null; // If course exists (clicked edit course)
+  private _id: number = null; // If course exists (clicked edit course)
+  private _isTopRated: boolean = null; // If course exists (clicked edit course)
   formGroup: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
-    private changeDetector: ChangeDetectorRef,
+  constructor(private _formBuilder: FormBuilder,
+    private _changeDetector: ChangeDetectorRef,
     public authorsServ: AuthorsService,
-    private courseService: CoursesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<AppState>) { }
+    private _courseService: CoursesService,
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _store: Store<AppState>) { }
 
   ngOnInit() {
-    this.route.params.subscribe((val) => {
+    this._route.params.subscribe((val) => {
+      // If clicked edit course button
       if (val.id) {
-        this.courseService.getItem(+val.id).subscribe((course) => {
+        this._courseService.getItem(+val.id).subscribe((course) => {
           const month = course.date.getMonth() + 1;
           const day = course.date.getDate();
           this.formGroup.setValue({
@@ -45,39 +44,39 @@ export class AddCourseComponent implements OnInit {
             duration: course.duration,
             authors: course.authors
           });
-          this.id = course.id;
-          this.isTopRated = course.topRated;
-          this.changeDetector.markForCheck();
+          this._id = course.id;
+          this._isTopRated = course.topRated;
+          this._changeDetector.markForCheck();
         });
       }
     });
-    this.formGroup = this.formBuilder.group({
+    this.formGroup = this._formBuilder.group({
       title: ['', [Validators.maxLength(50), Validators.required]],
       description: ['', [Validators.maxLength(500), Validators.required]],
-      date: new FormControl('', [dateValidator, Validators.required]),
-      duration: new FormControl('', [durationValidator, Validators.required, Validators.maxLength(3)]),
-      authors: new FormControl([], [authorValidator])
+      date: new FormControl('', [Validators.required]),
+      duration: new FormControl('', [Validators.required]),
+      authors: new FormControl([])
     });
   }
 
   save() {
     const dateArr = this.formGroup.value.date.split('/');
     const course = new CourseItem(
-      this.id,
+      this._id,
       this.formGroup.value.title,
       new Date(+dateArr[2], +dateArr[1] - 1, +dateArr[0]),
       +this.formGroup.value.duration,
       this.formGroup.value.description,
-      !!this.isTopRated,
+      !!this._isTopRated,
       this.formGroup.value.authors);
-    this.store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
-    this.courseService.resetSearch();
-    this.router.navigateByUrl('courses');
+    this._store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
+    this._courseService.resetSearch();
+    this._router.navigateByUrl('courses');
   }
 
   cancel() {
-    this.store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
-    this.courseService.resetSearch();
-    this.router.navigateByUrl('courses');
+    this._store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
+    this._courseService.resetSearch();
+    this._router.navigateByUrl('courses');
   }
 }

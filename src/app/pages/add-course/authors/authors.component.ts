@@ -1,5 +1,5 @@
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { Component, OnInit, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Injector } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -20,31 +20,33 @@ import { Author } from '../../../core/entities';
 })
 export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  selectedAuthors: Author[] = [];
   @Input() authors: Observable<Author[]>;
+  selectedAuthors: Author[] = [];
   allAuthors: Author[] = [];
-
-  private subscriber: Subscription;
 
   selected = [0, 0]; // First - selected index for selected, second - for all authors' lists
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  private _subscriber: Subscription;
+  ngControl: NgControl;
+
+  constructor(private _changeDetector: ChangeDetectorRef, private _inj: Injector) {
   }
 
   ngOnInit() {
-    this.subscriber = this.authors.subscribe((authors) => {
-      if (this.value !== []) {
+    this.ngControl = this._inj.get(NgControl);
+    this._subscriber = this.authors.subscribe((authors) => {
+      if (this.value && this.value !== []) {
         const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.getId));
         this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.getId));
       } else {
         this.allAuthors = authors;
       }
-      this.changeDetector.markForCheck();
+      this._changeDetector.markForCheck();
     });
   }
 
   ngOnDestroy() {
-    this.subscriber.unsubscribe();
+    this._subscriber.unsubscribe();
   }
 
   get value(): Author[] {
@@ -79,5 +81,4 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
-
 }

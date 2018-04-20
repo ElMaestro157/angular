@@ -14,87 +14,111 @@ import { CourseItem, Author } from './../../../core/entities';
 @Injectable()
 export class CoursesService {
 
-  private baseURL = 'http://localhost:3004';
-  private count = 10; // Number of courses to load
+  private BASE_URL = 'http://localhost:3004';
+  private _count = 10; // Number of courses to load
 
-  private startObs = new BehaviorSubject<number>(0); // Observable for start number
-  private start = 0; // Start number
-  private search = new BehaviorSubject<string>(null); // Search line
-  private length = Infinity; // Length of courses
+  // private startObs = new BehaviorSubject<number>(0); // Observable for start number
+  private _commonStart = 0; // Start number
+
+  private _searchStart = 0; // Start number
+  private _searchLine = '';
+
+  private _length = Infinity; // Length of courses (filtered or not, current view)
 
   get getList(): Observable<CourseItem[]> {
-    return this.store.select('courses');
+    return this._store.select('courses');
   }
 
-  constructor(private http: Http, private store: Store<AppState>) {
-    this.startObs.subscribe((val) => {
-      this.getListFromServer(val).subscribe((courses) => {
-        this.store.dispatch({ type: PUSH_LIST, payload: courses });
-      });
-    });
-
-    this.search.skip(1).subscribe((val) => {
-      this.getListFromServer(this.start, val).subscribe((courses) => {
-        this.store.dispatch({ type: SET_LIST, payload: courses });
-      });
-    });
+  constructor(private _http: Http, private _store: Store<AppState>) {
+    // Load initial partion
+    this._loadToStore(SET_LIST, this._commonStart);
+    this._commonStart += this._count;
 
     // Subscribing on changes from redux course's state for updating list
-    this.store.select('addEditCourse').skip(1).subscribe((course) => {
-      this.createUpdateCourseFromServer(course).subscribe((res) => {
+    this._store.select('addEditCourse').skip(1).subscribe((course) => {
+      this._createUpdateCourseFromServer(course).subscribe((res) => {
         if (+res || res === '0') {
           course.id = +res;
-          this.store.dispatch({ type: ADD_COURSE, payload: course });
+          this._store.dispatch({ type: ADD_COURSE, payload: course });
         } else {
-          this.store.dispatch({ type: EDIT_COURSE, payload: course });
+          this._store.dispatch({ type: EDIT_COURSE, payload: course });
         }
       });
     });
   }
 
-  resetSearch() {
-    this.search.next('');
-  }
-
-  increasePages() {
-    this.start += this.count;
-    this.length > this.start
-      ? this.search.value
-          ? this.search.next(this.search.value)
-          : this.startObs.next(this.start)
-      : this.start -= this.count;
-  }
-
-  filter(value: string) {
-    this.start = 0;
-    this.search.next(value);
-  }
-
-  removeItem(item: CourseItem) {
-    this.deleteFromServer(item.id).subscribe((courses) => {
-      this.start -= 1;
-      this.length -= 1;
-      this.store.dispatch({ type: DELETE_COURSE, payload: item });
+  // Universal function for pushing/setting list in redux store
+  private _loadToStore(type: string, start: number, query?: string, count = this._count) {
+    this._getListFromServer(start, query, count).subscribe((courses) => {
+      this._store.dispatch({ type: type, payload: courses });
     });
   }
 
+  // Resetting filter
+  resetSearch() {
+    this._searchLine = '';
+    this._searchStart = 0;
+
+    this._loadToStore(SET_LIST, 0, '' , this._commonStart);
+  }
+
+  // On Add more click
+  increasePages() {
+    if (this._searchLine) {
+      if (this._length > this._searchStart) {
+        this._loadToStore(PUSH_LIST, this._searchStart, this._searchLine);
+        this._searchStart += this._count;
+      }
+    } else {
+      if (this._length > this._commonStart) {
+        this._loadToStore(PUSH_LIST, this._commonStart);
+        this._commonStart += this._count;
+      }
+    }
+  }
+
+  // Filter function (on find click)
+  filter(value: string) {
+    if (!value) {
+      this.resetSearch();
+    } else {
+      this._searchStart = 0;
+      this._searchLine = value;
+      this._loadToStore(SET_LIST, this._searchStart, this._searchLine);
+      this._searchStart += 10;
+    }
+  }
+
+  // Removing course from list
+  removeItem(item: CourseItem) {
+    this._deleteFromServer(item.id).subscribe((courses) => {
+      if (this._searchLine) {
+        this._searchStart -= 1;
+      }
+      this._commonStart -= 1;
+      this._length -= 1;
+      this._store.dispatch({ type: DELETE_COURSE, payload: item });
+    });
+  }
+
+  // Gettin info about course
   getItem(id: number): Observable<CourseItem> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.baseURL + '/courses/' + id;
+    requestOptions.url = this.BASE_URL + '/courses/' + id;
 
     const request = new Request(requestOptions);
-    return this.http.request(request)
+    return this._http.request(request)
       .map((res) => res.json())
-      .map((value) => this.map(value));
+      .map((value) => this._map(value));
   }
 
   filterOutdated() {
     const date = new Date();
     date.setDate(date.getDate() - 14);
 
-    this.store.select('courses').subscribe(courses => {
-      this.store.dispatch({
+    this._store.select('courses').subscribe(courses => {
+      this._store.dispatch({
         type: SET_LIST, payload: courses.filter((val) => {
           return val.date >= date;
         })
@@ -102,78 +126,83 @@ export class CoursesService {
     });
   }
 
-  private getListFromServer(pages: number = 0, query?: string): Observable<CourseItem[]> {
+  // Function to show, did we load everything from server
+  isFullyLoaded(): boolean {
+    return !this._searchLine ? this._length <= this._commonStart : this._length <= this._searchStart;
+  }
+
+  private _getListFromServer(pages: number = 0, query?: string, count = this._count): Observable<CourseItem[]> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.baseURL + '/courses';
+    requestOptions.url = this.BASE_URL + '/courses';
     requestOptions.params = new URLSearchParams();
     if (pages) {
       requestOptions.params.set('start', pages + '');
     } else {
       requestOptions.params.set('start', '0');
     }
-    requestOptions.params.set('count', `${this.count}`);
+    requestOptions.params.set('count', `${count}`);
     if (query) {
       requestOptions.params.set('query', query);
     }
 
     const request = new Request(requestOptions);
-    return this.http.request(request)
+    return this._http.request(request)
               .map((res) => res.json())
               .map((coursesObj) => {
-                this.length = coursesObj.length;
-                return Array.from(coursesObj.courses).map((obj) => this.map(obj));
+                this._length = coursesObj.length;
+                return Array.from(coursesObj.courses).map((obj) => this._map(obj));
               });
   }
 
-  private deleteFromServer(id: number): Observable<Response> {
+  private _deleteFromServer(id: number): Observable<Response> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Delete;
-    requestOptions.url = this.baseURL + '/courses/' + id;
+    requestOptions.url = this.BASE_URL + '/courses/' + id;
 
     const request = new Request(requestOptions);
-    return this.http.request(request);
+    return this._http.request(request);
   }
 
-  private createUpdateCourseFromServer(course: CourseItem): Observable<String> {
+  private _createUpdateCourseFromServer(course: CourseItem): Observable<String> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Post;
-    requestOptions.url = this.baseURL + '/courses';
-    requestOptions.body = this.mapReverse(course);
+    requestOptions.url = this.BASE_URL + '/courses';
+    requestOptions.body = this._mapReverse(course);
     if (course.id || course.id === 0) {
       requestOptions.url += '/' + course.id;
       requestOptions.body.id = course.id;
     }
     const request = new Request(requestOptions);
-    return this.http.request(request)
+    return this._http.request(request)
                 .map(res => res.text());
   }
 
-  private map(val: any): CourseItem {
+  private _map(val: any): CourseItem {
     return new CourseItem(+val.id,
       val.name, new Date(val.date),
       +val.length, val.description,
       !!val.isTopRated,
-      this.mapAuthors(val.authors));
+      this._mapAuthors(val.authors));
   }
 
-  private mapReverse(course: CourseItem): any {
+  private _mapReverse(course: CourseItem): any {
     return {
       // id: course.id,
       name: course.title,
       description: course.description,
       isTopRated: course.topRated,
       date: course.date.toDateString(),
-      authors: this.mapAuthorsReverse(course.authors),
+      authors: this._mapAuthorsReverse(course.authors),
       length: '' + course.duration,
     };
   }
 
-  private mapAuthors(authors: any[]): Author[] {
+  private _mapAuthors(authors: any[]): Author[] {
     return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
   }
 
-  private mapAuthorsReverse(authors: Author[]): any[] {
+  private _mapAuthorsReverse(authors: Author[]): any[] {
     return authors.map((value) => {
       return {
         id: value.getId,

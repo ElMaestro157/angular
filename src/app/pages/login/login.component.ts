@@ -14,29 +14,29 @@ export class LoginComponent implements OnInit {
 
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder,
-    private loginService: LoginService,
-    private loaderService: LoaderBlockServiceService,
-    private router: Router) { }
+  constructor(private _fb: FormBuilder,
+    private _loginService: LoginService,
+    private _loaderService: LoaderBlockServiceService,
+    private _router: Router) { }
 
   ngOnInit() {
-    this.formGroup = this.fb.group({
+    this.formGroup = this._fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
   enter() {
-    this.loaderService.show();
-    this.loginService.login(this.formGroup.controls.login.value, this.formGroup.controls.password.value)
+    this._loaderService.show();
+    this._loginService.login(this.formGroup.controls.login.value, this.formGroup.controls.password.value)
       .subscribe(() => {
         alert('Success');
-        this.loaderService.hide();
-        this.router.navigateByUrl('courses');
+        this._loaderService.hide();
+        this._router.navigateByUrl('courses');
       },
         (val) => {
           alert('Failed');
-          this.loaderService.hide();
+          this._loaderService.hide();
           console.log(val);
         });
   }

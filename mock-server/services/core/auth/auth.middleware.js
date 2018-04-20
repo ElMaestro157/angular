@@ -21,7 +21,7 @@ module.exports = (server) => {
 	});
 
   // Getting user's info on token
-	router.post('/auth/userinfo', (req, res, next) => {
+	router.post('/auth/userInfo', (req, res, next) => {
 		let users = server.db.getState().users,
 			matchedUser = users.find((user) => {
 				return user.fakeToken === req.header('Authorization');

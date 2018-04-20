@@ -1,5 +1,5 @@
 import { FormGroup, NgControl, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-duration',
@@ -11,19 +11,23 @@ import { Component, OnInit, Injector } from '@angular/core';
       useExisting: DurationComponent,
       multi: true
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DurationComponent implements OnInit, ControlValueAccessor {
 
   formGroup: FormGroup;
   ngControl: NgControl;
 
-  constructor(private inj: Injector) {
+  constructor(private _inj: Injector, private _changeDetector: ChangeDetectorRef) {
     this.formGroup = new FormGroup({
       duration: new FormControl('')
     });
 
-    this.formGroup.valueChanges.subscribe(data => this.onChange(this.value));
+    this.formGroup.valueChanges.subscribe(data => {
+      this.onChange(this.value);
+      this._changeDetector.markForCheck();
+    });
   }
 
   get value() {
@@ -31,7 +35,7 @@ export class DurationComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    this.ngControl = this.inj.get(NgControl);
+    this.ngControl = this._inj.get(NgControl);
   }
 
   onChange = (_: any) => { };

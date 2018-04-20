@@ -19,13 +19,13 @@ export class DateComponent implements OnInit, ControlValueAccessor {
   formGroup: FormGroup;
   ngControl: NgControl;
 
-  constructor(private inj: Injector, private changeDetector: ChangeDetectorRef) {
+  constructor(private _inj: Injector, private _changeDetector: ChangeDetectorRef) {
     this.formGroup = new FormGroup({
       date: new FormControl('')
     });
     this.formGroup.valueChanges.subscribe(data => {
       this.onChange(this.value);
-      this.changeDetector.markForCheck();
+      this._changeDetector.markForCheck();
     });
   }
 
@@ -38,7 +38,7 @@ export class DateComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    this.ngControl = this.inj.get(NgControl);
+    this.ngControl = this._inj.get(NgControl);
   }
 
   onChange = (_: any) => { };

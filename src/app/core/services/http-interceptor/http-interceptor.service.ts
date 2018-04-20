@@ -9,7 +9,7 @@ export class HttpInterceptorService extends Http {
     super(_backend, _defaultOptions);
   }
 
-  _setCustomHeaders(options?: RequestOptionsArgs): RequestOptionsArgs {
+  private _setCustomHeaders(options?: RequestOptionsArgs): RequestOptionsArgs {
     if (!options) {
       options = new RequestOptions({});
     }

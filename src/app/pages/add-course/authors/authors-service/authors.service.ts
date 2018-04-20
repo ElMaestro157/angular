@@ -7,14 +7,14 @@ import { CourseItem, Author } from '../../../../core/entities';
 @Injectable()
 export class AuthorsService {
 
-  private baseURL = 'http://localhost:3004';
+  private BASE_URL = 'http://localhost:3004';
 
-  constructor(private http: Http) { }
+  constructor(private _http: Http) { }
 
   getAuthors(course?: CourseItem): Observable<Author[]> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.baseURL + '/courses';
+    requestOptions.url = this.BASE_URL + '/courses';
     if (course) {
       requestOptions.url += `/${course.id}`;
     } else {
@@ -23,7 +23,7 @@ export class AuthorsService {
 
     const request = new Request(requestOptions);
 
-    return this.http.request(request)
+    return this._http.request(request)
           .map((res) => res.json())
           .map(value => course ? this.mapAuthors(value.authors) : this.mapAuthors(value));
   }

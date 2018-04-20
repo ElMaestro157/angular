@@ -14,24 +14,24 @@ import 'rxjs/add/observable/of';
 })
 export class LogoComponent implements OnInit, OnDestroy {
 
-  public logo: string; // Breadcrumb
+  public breadcrumb: string; // Breadcrumb
 
   private _loginSubscriber: Subscription;
   private _routerSubscriber: Subscription;
 
-  constructor(private _ref: ChangeDetectorRef,
+  constructor(private _changeDetector: ChangeDetectorRef,
     private _loginService: LoginService,
     private _router: Router) {
   }
 
   ngOnInit() {
     this._loginSubscriber = this._loginService.getUserNameObs.subscribe(() => {
-      this._ref.markForCheck();
+      this._changeDetector.markForCheck();
     });
     this._routerSubscriber = this._router.events.subscribe((events) => {
       if (events instanceof NavigationStart) {
-        this.logo = events.url.split('/')[1].toUpperCase();
-        this._ref.markForCheck();
+        this.breadcrumb = events.url.split('/')[1].toUpperCase();
+        this._changeDetector.markForCheck();
       }
     });
   }
@@ -47,7 +47,7 @@ export class LogoComponent implements OnInit, OnDestroy {
   }
 
   breadCrumbClick() {
-    this._router.navigateByUrl(`${this.logo.toLowerCase()}`);
+    this._router.navigateByUrl(`${this.breadcrumb.toLowerCase()}`);
   }
 
   getUserName(): Observable<string> {

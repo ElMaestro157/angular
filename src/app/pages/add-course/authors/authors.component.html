@@ -1,5 +1,5 @@
 <div class="main">
-  <div class="list">
+  <div class="list card" [ngClass]="{ 'is-invalid': ngControl.invalid }">
     <ul class="list-group scrollbar-morpheus-den bordered-indigo thin" *ngIf="selectedAuthors.length !== 0">
       <li (click)="selected[0] = i;" class="list-group-item" [ngClass]="{ 'active': selected[0] === i }" *ngFor="let author of selectedAuthors; let i = index">
         {{author['firstName'] + ' ' + author['lastName']}}
@@ -14,7 +14,7 @@
       <i class="fas fa-angle-left"></i>
     </button>
   </div>
-  <div class="list">
+  <div class="list card">
     <ul class="list-group scrollbar-morpheus-den bordered-indigo thin" *ngIf="allAuthors.length !== 0">
       <li (click)="selected[1] = i;" class="list-group-item" [ngClass]="{ 'active': selected[1] === i }" *ngFor="let author of allAuthors; let i = index">
         {{author['firstName'] + ' ' + author['lastName']}}

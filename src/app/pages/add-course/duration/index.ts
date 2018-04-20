@@ -1,2 +1,2 @@
 export * from './duration.module';
-export * from './duration-validation';
+export * from './duration-validator';

@@ -13,7 +13,7 @@ export class CourseComponent {
 
   @Output() deleteEvent = new EventEmitter<CourseItem>();
 
-  constructor(private router: Router) { }
+  constructor(private _router: Router) { }
 
   delete() {
     if (confirm('Are you sure to delete this item?')) {
@@ -22,7 +22,7 @@ export class CourseComponent {
   }
 
   edit() {
-    this.router.navigate(['/courses', this.course.id]);
+    this._router.navigate(['/courses', this.course.id]);
   }
 
 }

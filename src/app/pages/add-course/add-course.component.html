@@ -4,6 +4,9 @@
     <div class="col-4">
       <input class="form-control" type="text" formControlName="title" [ngClass]="{ 'is-invalid': formGroup.get('title')?.invalid }">
     </div>
+    <div class="invalid" *ngIf="formGroup.get('title')?.invalid && formGroup.get('title').dirty && formGroup.get('title').value.length >= 50">
+      Invalid length! Should be less than 50.
+    </div>
     <div class="invalid" *ngIf="formGroup.get('title')?.invalid && formGroup.get('title').touched && formGroup.get('title').value === ''">
       * required
     </div>
@@ -13,13 +16,16 @@
     <div class="col-8">
       <textarea class="form-control input description-area scrollbar-morpheus-den bordered-indigo thin" [ngClass]="{ 'is-invalid': formGroup.get('description')?.invalid }" formControlName="description"></textarea>
     </div>
+    <div class="invalid" *ngIf="formGroup.get('description')?.invalid && formGroup.get('description').dirty && formGroup.get('description').value.length >= 500">
+      Invalid length! Should be less than 500.
+    </div>
     <div class="invalid" *ngIf="formGroup.get('description')?.invalid && formGroup.get('description').touched && formGroup.get('description').value === ''">
       * required
     </div>
   </div>
   <div class="form-group row">
     <label class="col-2 col-form-label" for="date">Date</label>
-    <app-date class="col-3" formControlName="date"></app-date>
+    <app-date class="col-3" formControlName="date" appDateValidator></app-date>
     <div class="invalid" *ngIf="formGroup.get('date')?.invalid && formGroup.get('date').dirty && formGroup.get('date').value !== ''">
       Invalid date! Write dd/MM/yyyy
     </div>
@@ -29,18 +35,18 @@
   </div>
   <div class="form-group row">
     <label class="col-2 col-form-label" for="duration">Duration</label>
-    <app-duration class="col-6" formControlName="duration"></app-duration>
-    <div class="invalid" *ngIf="formGroup.get('duration')?.invalid && formGroup.get('duration').dirty && formGroup.get('duration').value !== ''">
-      Invalid duration! Write positive number with max length 3 symbols
-    </div>
+    <app-duration class="col-8" formControlName="duration" appDurationValidator></app-duration>
     <div class="invalid" *ngIf="formGroup.get('duration')?.invalid && formGroup.get('duration').touched && formGroup.get('duration').value === ''">
       * required
+    </div>
+    <div class="invalid" *ngIf="formGroup.get('duration')?.invalid && formGroup.get('duration').dirty && formGroup.get('duration').value !== ''">
+      Invalid duration number!
     </div>
   </div>
   <div class="form-group row">
     <label class="col-2 col-form-label" for="authors">Authors</label>
-    <app-authors class="col-10" formControlName="authors" [authors]="authorsServ.getAuthors()"></app-authors>
-    <div class="invalid" *ngIf="formGroup.get('authors')?.invalid && formGroup.get('authors').touched && formGroup.get('authors').value === []">
+    <app-authors class="col-10" formControlName="authors" [authors]="authorsServ.getAuthors()" appAuthorValidator></app-authors>
+    <div class="invalid" *ngIf="formGroup.get('authors')?.invalid && formGroup.get('authors').value.length === 0">
       * required
     </div>
   </div>

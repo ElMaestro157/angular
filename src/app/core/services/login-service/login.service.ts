@@ -13,10 +13,10 @@ import { STORE_USER, UNLOAD_USER } from './login-service-reducer';
 @Injectable()
 export class LoginService {
 
-  private token: string = null;
+  private _token: string = null;
 
   get getToken(): string {
-    return this.token;
+    return this._token;
   }
 
   // Observable for user's name for LogoComponent
@@ -24,7 +24,7 @@ export class LoginService {
     return this.store.select('user').map(user => user ? user.getName.first + ' ' + user.getName.last : null);
   }
 
-  private baseURL = 'http://localhost:3004';
+  private BASE_URL = 'http://localhost:3004';
 
   constructor(private http: Http, private store: Store<AppState>) {
     // Getting user from sessionStorage, if exists
@@ -35,7 +35,7 @@ export class LoginService {
 
     // Subscribing on user's changes
     this.store.select('user').subscribe(user => {
-      this.token = user ? user.getToken : null;
+      this._token = user ? user.getToken : null;
       sessionStorage.setItem('user', JSON.stringify(user));
     });
   }
@@ -43,11 +43,11 @@ export class LoginService {
   // Request to server for user's info
   getUserInfo(): Observable<User> {
     const headers = new Headers();
-    headers.append('Authorization', this.token);
+    headers.append('Authorization', this._token);
 
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Post;
-    requestOptions.url = this.baseURL + '/auth/userinfo';
+    requestOptions.url = this.BASE_URL + '/auth/userinfo';
     requestOptions.headers = headers;
 
     const request = new Request(requestOptions);
@@ -58,10 +58,10 @@ export class LoginService {
         }
         return res.json();
       })
-      .map((user) => this.map(user));
+      .map((user) => this._map(user));
   }
 
-  // Reqeust to server for loggging
+  // Reqeust to server for logging
   login(login: string, password: string): Observable<void> {
     const requestOptions = new RequestOptions();
 
@@ -70,7 +70,7 @@ export class LoginService {
       login: login,
       password: password
     };
-    requestOptions.url = this.baseURL + '/auth/login';
+    requestOptions.url = this.BASE_URL + '/auth/login';
 
     const request = new Request(requestOptions);
     return this.http.request(request)
@@ -81,7 +81,7 @@ export class LoginService {
                 return res.json();
               })
               .map(({token}) => {
-                this.token = token;
+                this._token = token;
                 this.getUserInfo().subscribe((user) => this.store.dispatch({ type: STORE_USER, payload: user }));
               });
   }
@@ -91,11 +91,11 @@ export class LoginService {
   }
 
   isAuthenticated(): boolean {
-    return this.token !== null;
+    return this._token !== null;
   }
 
   // Mapping objects to User type
-  private map(user: any): User {
+  private _map(user: any): User {
     return new User(user.id, user.name, user.login, user.password, user.fakeToken);
   }
 }

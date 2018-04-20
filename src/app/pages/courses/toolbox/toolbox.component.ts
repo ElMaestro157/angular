@@ -12,15 +12,15 @@ export class ToolboxComponent {
 
   value = '';
 
-  constructor(private router: Router, private courseService: CoursesService) {
+  constructor(private _router: Router, private _courseService: CoursesService) {
   }
 
   onClick() {
-    this.courseService.filter(this.value);
+    this._courseService.filter(this.value);
   }
 
   createCourse() {
-    this.router.navigate(['courses', 'new']);
+    this._router.navigate(['courses', 'new']);
   }
 
 }
