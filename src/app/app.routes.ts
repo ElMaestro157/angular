@@ -1,9 +1,10 @@
-import { NoContentComponent } from './pages/no-content/no-content.component';
-import { CoursesComponent } from './pages/courses/courses.component';
-import { AddCourseComponent } from './pages/add-course/add-course.component';
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
+
 import { CanActivateService } from './core/services';
+import { AddCourseComponent } from './pages/add-course/add-course.component';
+import { CoursesComponent } from './pages/courses/courses.component';
+import { LoginComponent } from './pages/login/login.component';
+import { NoContentComponent } from './pages/no-content/no-content.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full'},

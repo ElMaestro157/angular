@@ -1,21 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams } from '@angular/http';
-
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../app.redux';
-import { SET_LIST, ADD_COURSE, EDIT_COURSE, DELETE_COURSE, PUSH_LIST } from '../courses-redux-reducer';
-import { SAVE_COURSE, CANCEL_SAVING } from './../../add-course/add-course-reducer';
-
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/skip';
 
-import { CourseItem, Author } from './../../../core/entities';
+import { Injectable } from '@angular/core';
+import { Http, Request, RequestMethod, RequestOptions, Response, URLSearchParams } from '@angular/http';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
+import { AppState } from '../../../app.redux';
+import { BASE_URL } from '../../../core/appSettings';
+import { ADD_COURSE, DELETE_COURSE, EDIT_COURSE, PUSH_LIST, SET_LIST } from '../courses-redux-reducer';
+import { Author, CourseItem } from './../../../core/entities';
+import { CANCEL_SAVING, SAVE_COURSE } from './../../add-course/add-course-reducer';
 
 @Injectable()
 export class CoursesService {
 
-  private BASE_URL = 'http://localhost:3004';
   private _count = 10; // Number of courses to load
 
   // private startObs = new BehaviorSubject<number>(0); // Observable for start number
@@ -24,7 +23,7 @@ export class CoursesService {
   private _searchStart = 0; // Start number
   private _searchLine = '';
 
-  private _length = Infinity; // Length of courses (filtered or not, current view)
+  private _length: number; // Length of courses (filtered or not, current view)
 
   get getList(): Observable<CourseItem[]> {
     return this._store.select('courses');
@@ -91,27 +90,27 @@ export class CoursesService {
   }
 
   // Removing course from list
-  removeItem(item: CourseItem) {
-    this._deleteFromServer(item.id).subscribe((courses) => {
-      if (this._searchLine) {
-        this._searchStart -= 1;
-      }
-      this._commonStart -= 1;
-      this._length -= 1;
-      this._store.dispatch({ type: DELETE_COURSE, payload: item });
-    });
+  removeItem(item: CourseItem): Observable<void> {
+    return this._deleteFromServer(item.id).map((courses) => {
+        if (this._searchLine) {
+          this._searchStart -= 1;
+        }
+        this._commonStart -= 1;
+        this._length -= 1;
+        this._store.dispatch({ type: DELETE_COURSE, payload: item });
+      });
   }
 
   // Gettin info about course
   getItem(id: number): Observable<CourseItem> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.BASE_URL + '/courses/' + id;
+    requestOptions.url = BASE_URL + '/courses/' + id;
 
     const request = new Request(requestOptions);
     return this._http.request(request)
       .map((res) => res.json())
-      .map((value) => this._map(value));
+      .map((value) => this._toDTOCourse(value));
   }
 
   filterOutdated() {
@@ -145,12 +144,10 @@ export class CoursesService {
   private _getListFromServer(pages: number = 0, query?: string, count = this._count): Observable<CourseItem[]> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Get;
-    requestOptions.url = this.BASE_URL + '/courses';
+    requestOptions.url = BASE_URL + '/courses';
     requestOptions.params = new URLSearchParams();
     if (pages) {
       requestOptions.params.set('start', pages + '');
-    } else {
-      requestOptions.params.set('start', '0');
     }
     requestOptions.params.set('count', `${count}`);
     if (query) {
@@ -162,14 +159,14 @@ export class CoursesService {
               .map((res) => res.json())
               .map((coursesObj) => {
                 this._length = coursesObj.length;
-                return Array.from(coursesObj.courses).map((obj) => this._map(obj));
+                return Array.from(coursesObj.courses).map((obj) => this._toDTOCourse(obj));
               });
   }
 
   private _deleteFromServer(id: number): Observable<Response> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Delete;
-    requestOptions.url = this.BASE_URL + '/courses/' + id;
+    requestOptions.url = BASE_URL + '/courses/' + id;
 
     const request = new Request(requestOptions);
     return this._http.request(request);
@@ -178,8 +175,8 @@ export class CoursesService {
   private _createUpdateCourseFromServer(course: CourseItem): Observable<String> {
     const requestOptions = new RequestOptions();
     requestOptions.method = RequestMethod.Post;
-    requestOptions.url = this.BASE_URL + '/courses';
-    requestOptions.body = this._mapReverse(course);
+    requestOptions.url = BASE_URL + '/courses';
+    requestOptions.body = this._toServerCourse(course);
     if (course.id || course.id === 0) {
       requestOptions.url += '/' + course.id;
       requestOptions.body.id = course.id;
@@ -189,31 +186,31 @@ export class CoursesService {
                 .map(res => res.text());
   }
 
-  private _map(val: any): CourseItem {
+  private _toDTOCourse(val: any): CourseItem {
     return new CourseItem(+val.id,
       val.name, new Date(val.date),
       +val.length, val.description,
       !!val.isTopRated,
-      this._mapAuthors(val.authors));
+      this._toDTOAuthors(val.authors));
   }
 
-  private _mapReverse(course: CourseItem): any {
+  private _toServerCourse(course: CourseItem): any {
     return {
       // id: course.id,
       name: course.title,
       description: course.description,
       isTopRated: course.topRated,
       date: course.date.toDateString(),
-      authors: this._mapAuthorsReverse(course.authors),
+      authors: this._toServerAuthors(course.authors),
       length: '' + course.duration,
     };
   }
 
-  private _mapAuthors(authors: any[]): Author[] {
+  private _toDTOAuthors(authors: any[]): Author[] {
     return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
   }
 
-  private _mapAuthorsReverse(authors: Author[]): any[] {
+  private _toServerAuthors(authors: Author[]): any[] {
     return authors.map((value) => {
       return {
         id: value.getId,

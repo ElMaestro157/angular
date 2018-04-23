@@ -1,19 +1,16 @@
 import { NgModule } from '@angular/core';
+import { Http, HttpModule, RequestOptions, XHRBackend } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { Http, XHRBackend, RequestOptions, ConnectionBackend, HttpModule } from '@angular/http';
-import { HttpInterceptorService } from './core/services';
-
 import { RouterModule } from '@angular/router';
-import { ROUTES } from './app.routes';
-
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './app.redux';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
-import { CoursesModule, LoginModule, AddCourseModule, NoContentModule } from './pages';
-import { LogoModule, FooterModule} from './core/components';
+import { reducers } from './app.redux';
+import { ROUTES } from './app.routes';
+import { LogoComponent, FooterComponent } from './core/components';
+import { HttpInterceptorService, LoaderBlockServiceService } from './core/services';
+import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from './pages';
 
 function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOptions): Http {
   return new HttpInterceptorService(xhrBackend, requestOptions);
@@ -21,13 +18,13 @@ function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOption
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LogoComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
-    LogoModule,
     CoursesModule,
-    FooterModule,
     LoginModule,
     NoContentModule,
     AddCourseModule,
@@ -37,6 +34,7 @@ function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOption
     StoreDevtoolsModule.instrument(),
   ],
   providers: [
+    LoaderBlockServiceService,
     {
       provide: Http,
       useFactory: httpClientFactory,

@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { LoaderBlockComponent } from './loader-block.component';
-import { LoaderBlockServiceService } from '../../services';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [LoaderBlockComponent],
-  exports: [LoaderBlockComponent],
-  providers: [LoaderBlockServiceService]
+  exports: [LoaderBlockComponent]
 })
 export class LoaderBlockModule { }

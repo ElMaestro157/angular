@@ -1,1 +1,1 @@
-export * from './course-directive.module';
+export * from './course.directive';

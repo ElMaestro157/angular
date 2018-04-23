@@ -1,5 +1,5 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/http';
+import { inject, TestBed } from '@angular/core/testing';
+import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { Observable } from 'rxjs/Observable';
 

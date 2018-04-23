@@ -1,5 +1,6 @@
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
+
 import { CourseItem } from '../../../core/entities';
 
 @Component({

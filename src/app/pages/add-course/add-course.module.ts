@@ -1,28 +1,29 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+
 import { CanActivateService } from '../../core/services';
-
-import { AuthorsModule, AuthorsService, AuthorValidatorModule } from './authors';
 import { CoursesService } from '../courses/courses-service';
-
 import { AddCourseComponent } from './add-course.component';
-import { DurationModule, DurationValidatorModule } from './duration';
-import { DateModule, DateValidatorModule } from './date';
+import { AuthorsComponent, AuthorsService, AuthorValidatorDirective } from './authors';
+import { DateComponent, DateValidatorDirective } from './date';
+import { DurationModule, DurationValidatorDirective } from './duration';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    AuthorsModule,
-    AuthorValidatorModule,
-    DateModule,
-    DateValidatorModule,
     DurationModule,
-    DurationValidatorModule
   ],
   providers: [CanActivateService, CoursesService, AuthorsService],
   exports: [AddCourseComponent],
-  declarations: [AddCourseComponent]
+  declarations: [
+    AddCourseComponent,
+    AuthorValidatorDirective,
+    AuthorsComponent,
+    DurationValidatorDirective,
+    DateValidatorDirective,
+    DateComponent
+  ]
 })
 export class AddCourseModule { }

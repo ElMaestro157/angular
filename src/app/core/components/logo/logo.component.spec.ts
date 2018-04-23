@@ -1,14 +1,13 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { FooterComponent } from '..';
 import { ROUTES } from '../../../app.routes';
-
-import { LogoComponent } from './logo.component';
-import { FooterModule } from '..';
-import { CoursesModule, AddCourseModule, LoginModule, NoContentModule } from '../../../pages';
-
+import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from '../../../pages';
 import { LoginService, LoginServiceMock } from '../../services';
+import { LogoComponent } from './logo.component';
 
 describe('LogoComponent', () => {
   let component: LogoComponent;
@@ -18,10 +17,9 @@ describe('LogoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogoComponent ],
+      declarations: [ LogoComponent, FooterComponent ],
       imports: [
         CoursesModule,
-        FooterModule,
         LoginModule,
         NoContentModule,
         AddCourseModule,

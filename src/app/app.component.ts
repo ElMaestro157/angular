@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',

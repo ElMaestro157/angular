@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { CoursesService } from './courses-service';
-import { LoaderBlockServiceService } from '../../core/services';
+
 import { CourseItem } from '../../core/entities';
+import { LoaderBlockServiceService } from '../../core/services';
+import { CoursesService } from './courses-service';
 
 @Component({
   selector: 'app-courses',
@@ -13,7 +14,7 @@ import { CourseItem } from '../../core/entities';
 })
 export class CoursesComponent implements OnInit, OnDestroy {
 
-  courses: CourseItem[]; // Courses' list
+  public courses: CourseItem[]; // Courses' list
   private _subscriber: Subscription;
 
   constructor(private _changeDetector: ChangeDetectorRef,
@@ -38,10 +39,9 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   onItemDelete(course: CourseItem) {
     this._loaderService.show();
-    setTimeout(() => {
+    this._coursesService.removeItem(course).subscribe(() => {
       this._loaderService.hide();
-    }, 0);
-    this._coursesService.removeItem(course);
+    });
   }
 
   isEmpty(): boolean {

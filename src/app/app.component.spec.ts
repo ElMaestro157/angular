@@ -1,16 +1,15 @@
-import { HttpModule } from '@angular/http';
-import { TestBed, async, tick, fakeAsync } from '@angular/core/testing';
-import { Routes, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { APP_BASE_HREF } from '@angular/common';
-
-import { LoginComponent } from './pages/login/login.component';
-import { AppComponent } from './app.component';
-import { CoursesModule, LoginModule, NoContentModule, AddCourseModule } from './pages';
-import { LogoModule, FooterModule } from './core/components';
-
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
+import { Router, Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { StoreModule } from '@ngrx/store';
+
+import { AppComponent } from './app.component';
 import { reducers } from './app.redux';
+import { FooterComponent, LogoComponent } from './core/components';
+import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from './pages';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -24,12 +23,12 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        FooterComponent,
+        LogoComponent
       ],
       imports: [
-        LogoModule,
         CoursesModule,
-        FooterModule,
         LoginModule,
         NoContentModule,
         AddCourseModule,

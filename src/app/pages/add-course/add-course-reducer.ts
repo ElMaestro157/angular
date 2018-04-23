@@ -1,4 +1,5 @@
-import { ActionReducer, Action } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store';
+
 import { CourseItem } from '../../core/entities';
 
 export const SAVE_COURSE = '[ADD-EDIT] Save course';

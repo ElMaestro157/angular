@@ -1,4 +1,5 @@
-import { ActionReducer, Action } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store';
+
 import { CourseItem } from '../../core/entities';
 
 export const SET_LIST = '[COURSES] Set courses list';

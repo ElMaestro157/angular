@@ -1,12 +1,11 @@
-import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/http';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { StoreModule, Store } from '@ngrx/store';
-import { reducers, AppState } from './../../../app.redux';
-import { STORE_USER, UNLOAD_USER } from './login-service-reducer';
-
+import { AppState, reducers } from './../../../app.redux';
+import { STORE_USER } from './login-service-reducer';
 import { LoginService } from './login.service';
 
 describe('LoginService', () => {

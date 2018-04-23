@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { LoaderBlockServiceMock, LoaderBlockServiceService } from '../../services';
 import { LoaderBlockComponent } from './loader-block.component';
-import { LoaderBlockServiceService, LoaderBlockServiceMock } from '../../services';
 
 describe('LoaderBlockComponent', () => {
   let component: LoaderBlockComponent;

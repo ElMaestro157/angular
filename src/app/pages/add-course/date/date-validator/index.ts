@@ -1,1 +1,1 @@
-export * from './date-validator.module';
+export * from './date-validator.directive';

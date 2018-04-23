@@ -1,4 +1,5 @@
 import { Action, ActionReducer } from '@ngrx/store';
+
 import { User } from '../../entities';
 
 export const STORE_USER = '[AUTH] Store user';

@@ -1,18 +1,18 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService, LoaderBlockServiceService } from '../../core/services';
+
+import { LoaderBlockServiceService, LoginService } from '../../core/services';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [LoaderBlockServiceService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
 
   constructor(private _fb: FormBuilder,
     private _loginService: LoginService,
@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
     this._loaderService.show();
     this._loginService.login(this.formGroup.controls.login.value, this.formGroup.controls.password.value)
       .subscribe(() => {
-        alert('Success');
         this._loaderService.hide();
         this._router.navigateByUrl('courses');
       },

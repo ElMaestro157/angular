@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCourseComponent } from './add-course.component';
-import { DurationModule } from './duration';
-import { DateModule } from './date';
 import { CanActivateService } from '../../core/services';
 import { CoursesService } from '../courses/courses-service';
+import { AddCourseComponent } from './add-course.component';
 import { AuthorsService } from './authors';
+import { DateComponent } from './date';
+import { DurationModule } from './duration';
 
 describe('AddCourseComponent', () => {
   let component: AddCourseComponent;
@@ -13,10 +13,9 @@ describe('AddCourseComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddCourseComponent ],
+      declarations: [ AddCourseComponent, DateComponent ],
       imports: [
-        DurationModule,
-        DateModule
+        DurationModule
       ],
       providers: [CanActivateService, CoursesService, AuthorsService]
     })

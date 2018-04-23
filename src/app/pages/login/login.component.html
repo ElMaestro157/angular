@@ -2,11 +2,11 @@
 <form [formGroup]="formGroup" class="main">
   <div>
     <label for="login">Login</label>
-    <input formControlName="login" class="form-control input" type="text" />
+    <input id="login" formControlName="login" class="form-control input" type="text" />
   </div>
   <div>
     <label for="password">Password</label>
-    <input class="form-control input" type="password" formControlName="password"/>
+    <input id="password" formControlName="password"  class="form-control input" type="password"/>
   </div>
   <button [disabled]="formGroup.invalid" class="btn btn-primary enter" (click)="enter()">Enter</button>
 </form>

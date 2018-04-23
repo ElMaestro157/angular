@@ -1,1 +1,1 @@
-export * from './duration-validator.module';
+export * from './duration-validator.directive';

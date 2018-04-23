@@ -1,4 +1,4 @@
-import { TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
 import { LoaderBlockServiceService } from './loader-block-service.service';
 

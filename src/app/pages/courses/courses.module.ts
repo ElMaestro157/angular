@@ -1,16 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { ToolboxModule } from './toolbox';
-import { CourseModule } from './course';
 import { LoaderBlockModule } from '../../core/components';
-import { NoDataModule } from './no-data';
-
-import { CoursesService } from './courses-service';
 import { CanActivateService } from '../../core/services';
-
-import { CoursesOrderByPipeModule } from './courses-order-by-pipe';
+import { CourseModule } from './course';
+import { CoursesOrderByPipe } from './courses-order-by-pipe';
+import { CoursesService } from './courses-service';
 import { CoursesComponent } from './courses.component';
+import { NoDataComponent } from './no-data';
+import { ToolboxModule } from './toolbox';
 
 @NgModule({
   imports: [
@@ -18,11 +16,13 @@ import { CoursesComponent } from './courses.component';
     ToolboxModule,
     CourseModule,
     LoaderBlockModule,
-    NoDataModule,
-    CoursesOrderByPipeModule
   ],
   providers: [CanActivateService, CoursesService],
-  declarations: [CoursesComponent],
+  declarations: [
+    CoursesComponent,
+    CoursesOrderByPipe,
+    NoDataComponent
+  ],
   exports: [CoursesComponent]
 })
 export class CoursesModule { }

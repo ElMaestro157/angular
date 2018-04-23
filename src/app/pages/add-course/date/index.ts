@@ -1,2 +1,2 @@
-export * from './date.module';
+export * from './date.component';
 export * from './date-validator';

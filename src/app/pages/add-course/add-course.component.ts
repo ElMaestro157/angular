@@ -1,14 +1,10 @@
-import { Store } from '@ngrx/store';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AppState } from '../../app.redux';
-import { SAVE_COURSE, CANCEL_SAVING } from './add-course-reducer';
-
-import { AuthorsService } from './authors';
-import { CoursesService } from './../courses/courses-service';
 import { CourseItem } from './../../core/entities';
+import { CoursesService } from './../courses/courses-service';
+import { AuthorsService } from './authors';
 
 @Component({
   selector: 'app-add-course',
@@ -20,7 +16,7 @@ export class AddCourseComponent implements OnInit {
 
   private _id: number = null; // If course exists (clicked edit course)
   private _isTopRated: boolean = null; // If course exists (clicked edit course)
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
 
   constructor(private _formBuilder: FormBuilder,
     private _changeDetector: ChangeDetectorRef,

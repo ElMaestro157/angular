@@ -1,1 +1,1 @@
-export * from './courses-order-by-pipe.module';
+export * from './courses-order-by.pipe';

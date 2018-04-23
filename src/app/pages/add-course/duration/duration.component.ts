@@ -1,5 +1,5 @@
-import { FormGroup, NgControl, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Injector, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 
 @Component({
   selector: 'app-duration',
@@ -8,7 +8,7 @@ import { Component, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DurationComponent,
+      useExisting: forwardRef(() => DurationComponent),
       multi: true
     }
   ],
@@ -16,8 +16,8 @@ import { Component, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef
 })
 export class DurationComponent implements OnInit, ControlValueAccessor {
 
-  formGroup: FormGroup;
-  ngControl: NgControl;
+  public formGroup: FormGroup;
+  public ngControl: NgControl;
 
   constructor(private _inj: Injector, private _changeDetector: ChangeDetectorRef) {
     this.formGroup = new FormGroup({

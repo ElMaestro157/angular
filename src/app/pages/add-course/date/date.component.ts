@@ -1,5 +1,5 @@
-import { Component, forwardRef, OnInit, Injector, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Injector, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 
 @Component({
   selector: 'app-date',
@@ -16,8 +16,8 @@ import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, FormGr
 })
 export class DateComponent implements OnInit, ControlValueAccessor {
 
-  formGroup: FormGroup;
-  ngControl: NgControl;
+  public formGroup: FormGroup;
+  public ngControl: NgControl;
 
   constructor(private _inj: Injector, private _changeDetector: ChangeDetectorRef) {
     this.formGroup = new FormGroup({

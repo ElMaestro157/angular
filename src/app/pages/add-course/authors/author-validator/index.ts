@@ -1,1 +1,1 @@
-export * from './author-validator.module';
+export * from './author-validator.directive';

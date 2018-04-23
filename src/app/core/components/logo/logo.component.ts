@@ -1,10 +1,11 @@
-import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { LoginService } from '../../services';
+import 'rxjs/add/observable/of';
 
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/of';
+
+import { LoginService } from '../../services';
 
 @Component({
   selector: 'app-logo',
