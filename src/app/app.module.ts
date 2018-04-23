@@ -1,5 +1,5 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { Http, HttpModule, RequestOptions, XHRBackend } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
@@ -8,13 +8,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { reducers } from './app.redux';
 import { ROUTES } from './app.routes';
-import { LogoComponent, FooterComponent } from './core/components';
+import { FooterComponent, LogoComponent } from './core/components';
 import { HttpInterceptorService, LoaderBlockServiceService } from './core/services';
 import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from './pages';
-
-function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOptions): Http {
-  return new HttpInterceptorService(xhrBackend, requestOptions);
-}
 
 @NgModule({
   declarations: [
@@ -28,7 +24,7 @@ function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOption
     LoginModule,
     NoContentModule,
     AddCourseModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
@@ -36,9 +32,9 @@ function httpClientFactory(xhrBackend: XHRBackend, requestOptions: RequestOption
   providers: [
     LoaderBlockServiceService,
     {
-      provide: Http,
-      useFactory: httpClientFactory,
-      deps: [XHRBackend, RequestOptions]
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

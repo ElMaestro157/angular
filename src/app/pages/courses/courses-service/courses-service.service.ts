@@ -1,8 +1,8 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/skip';
 
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http, Request, RequestMethod, RequestOptions, Response, URLSearchParams } from '@angular/http';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -29,7 +29,7 @@ export class CoursesService {
     return this._store.select('courses');
   }
 
-  constructor(private _http: Http, private _store: Store<AppState>) {
+  constructor(private _http: HttpClient, private _store: Store<AppState>) {
     // Load initial partion
     this._loadToStore(SET_LIST, this._commonStart);
     this._commonStart += this._count;
@@ -91,7 +91,7 @@ export class CoursesService {
 
   // Removing course from list
   removeItem(item: CourseItem): Observable<void> {
-    return this._deleteFromServer(item.id).map((courses) => {
+    return this._deleteFromServer(item.id).map((response) => {
         if (this._searchLine) {
           this._searchStart -= 1;
         }
@@ -103,14 +103,8 @@ export class CoursesService {
 
   // Gettin info about course
   getItem(id: number): Observable<CourseItem> {
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Get;
-    requestOptions.url = BASE_URL + '/courses/' + id;
-
-    const request = new Request(requestOptions);
-    return this._http.request(request)
-      .map((res) => res.json())
-      .map((value) => this._toDTOCourse(value));
+    return this._http.get(BASE_URL + '/courses/' + id)
+                      .map((value) => this._toDTOCourse(value));
   }
 
   filterOutdated() {
@@ -142,48 +136,39 @@ export class CoursesService {
   }
 
   private _getListFromServer(pages: number = 0, query?: string, count = this._count): Observable<CourseItem[]> {
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Get;
-    requestOptions.url = BASE_URL + '/courses';
-    requestOptions.params = new URLSearchParams();
+    const httpParams = new HttpParams();
     if (pages) {
-      requestOptions.params.set('start', pages + '');
+      httpParams.set('start', pages + '');
     }
-    requestOptions.params.set('count', `${count}`);
+    httpParams.set('count', `${count}`);
     if (query) {
-      requestOptions.params.set('query', query);
+      httpParams.set('query', query);
     }
-
-    const request = new Request(requestOptions);
-    return this._http.request(request)
-              .map((res) => res.json())
-              .map((coursesObj) => {
-                this._length = coursesObj.length;
-                return Array.from(coursesObj.courses).map((obj) => this._toDTOCourse(obj));
-              });
+    return this._http.get<any>(BASE_URL + '/courses', {
+      params: httpParams
+    }).map((coursesObj) => {
+        this._length = coursesObj.length;
+        return Array.from(coursesObj.courses).map((obj) => this._toDTOCourse(obj));
+      });
   }
 
-  private _deleteFromServer(id: number): Observable<Response> {
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Delete;
-    requestOptions.url = BASE_URL + '/courses/' + id;
-
-    const request = new Request(requestOptions);
-    return this._http.request(request);
+  private _deleteFromServer(id: number): Observable<string> {
+    return this._http.delete(BASE_URL + '/courses/' + id, {
+      responseType: 'text'
+    });
   }
 
-  private _createUpdateCourseFromServer(course: CourseItem): Observable<String> {
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Post;
-    requestOptions.url = BASE_URL + '/courses';
-    requestOptions.body = this._toServerCourse(course);
+  private _createUpdateCourseFromServer(course: CourseItem): Observable<string> {
+    let url = BASE_URL + '/courses';
+    const body = this._toServerCourse(course);
     if (course.id || course.id === 0) {
-      requestOptions.url += '/' + course.id;
-      requestOptions.body.id = course.id;
+      url += '/' + course.id;
+      body.id = course.id;
     }
-    const request = new Request(requestOptions);
-    return this._http.request(request)
-                .map(res => res.text());
+
+    return this._http.post(url, body, {
+      responseType: 'text'
+    });
   }
 
   private _toDTOCourse(val: any): CourseItem {

@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/map';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Headers, Http, Request, RequestMethod, RequestOptions, Response } from '@angular/http';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,7 +24,7 @@ export class LoginService {
     return this.store.select('user').map(user => user ? user.getName.first + ' ' + user.getName.last : null);
   }
 
-  constructor(private http: Http, private store: Store<AppState>) {
+  constructor(private http: HttpClient, private store: Store<AppState>) {
     // Getting user from sessionStorage, if exists
     const temp = JSON.parse(sessionStorage.getItem('user'));
     if (temp) {
@@ -40,48 +40,24 @@ export class LoginService {
 
   // Request to server for user's info
   getUserInfo(): Observable<User> {
-    const headers = new Headers();
-    headers.append('Authorization', this._token);
+    const headers = new HttpHeaders().append('Authorization', this._token);
 
-    const requestOptions = new RequestOptions();
-    requestOptions.method = RequestMethod.Post;
-    requestOptions.url = BASE_URL + '/auth/userinfo';
-    requestOptions.headers = headers;
-
-    const request = new Request(requestOptions);
-    return this.http.request(request)
-      .map((res: Response) => {
-        if (res.status !== 200) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
-      .map((user) => this._toDTO(user));
+    return this.http.post(BASE_URL + '/auth/userinfo', { }, {
+      headers: headers
+    })
+    .map((user) => this._toDTO(user));
   }
 
   // Reqeust to server for logging
   login(login: string, password: string): Observable<void> {
-    const requestOptions = new RequestOptions();
-
-    requestOptions.method = RequestMethod.Post;
-    requestOptions.body = {
+    return this.http.post<any>(BASE_URL + '/auth/login', {
       login: login,
       password: password
-    };
-    requestOptions.url = BASE_URL + '/auth/login';
-
-    const request = new Request(requestOptions);
-    return this.http.request(request)
-              .map((res: Response) => {
-                if (res.status !== 200) {
-                  throw new Error(res.statusText);
-                }
-                return res.json();
-              })
-              .map(({token}) => {
-                this._token = token;
-                this.getUserInfo().subscribe((user) => this.store.dispatch({ type: STORE_USER, payload: user }));
-              });
+    })
+    .map(({ token }) => {
+      this._token = token;
+      this.getUserInfo().subscribe((user) => this.store.dispatch({ type: STORE_USER, payload: user }));
+    });
   }
 
   logout() {
