@@ -4,6 +4,7 @@ import { Http, Response, RequestOptions, RequestMethod, Request, URLSearchParams
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.redux';
 import { SET_LIST, ADD_COURSE, EDIT_COURSE, DELETE_COURSE, PUSH_LIST } from '../courses-redux-reducer';
+import { SAVE_COURSE, CANCEL_SAVING } from './../../add-course/add-course-reducer';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -129,6 +130,16 @@ export class CoursesService {
   // Function to show, did we load everything from server
   isFullyLoaded(): boolean {
     return !this._searchLine ? this._length <= this._commonStart : this._length <= this._searchStart;
+  }
+
+  // Saving course to store
+  saveCourseDispatch(course: CourseItem) {
+    this._store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
+  }
+
+  // Dispatching action about cancelling saving
+  cancelSavingDispatch() {
+    this._store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
   }
 
   private _getListFromServer(pages: number = 0, query?: string, count = this._count): Observable<CourseItem[]> {

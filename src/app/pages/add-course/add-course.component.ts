@@ -27,8 +27,7 @@ export class AddCourseComponent implements OnInit {
     public authorsServ: AuthorsService,
     private _courseService: CoursesService,
     private _route: ActivatedRoute,
-    private _router: Router,
-    private _store: Store<AppState>) { }
+    private _router: Router) { }
 
   ngOnInit() {
     this._route.params.subscribe((val) => {
@@ -69,13 +68,13 @@ export class AddCourseComponent implements OnInit {
       this.formGroup.value.description,
       !!this._isTopRated,
       this.formGroup.value.authors);
-    this._store.select('addEditCourse').dispatch({ type: SAVE_COURSE, payload: course });
+    this._courseService.saveCourseDispatch(course);
     this._courseService.resetSearch();
     this._router.navigateByUrl('courses');
   }
 
   cancel() {
-    this._store.select('addEditCourse').dispatch({ type: CANCEL_SAVING });
+    this._courseService.cancelSavingDispatch();
     this._courseService.resetSearch();
     this._router.navigateByUrl('courses');
   }
