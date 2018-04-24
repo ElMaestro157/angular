@@ -4,7 +4,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgCont
 @Component({
   selector: 'app-date',
   templateUrl: './date.component.html',
-  styleUrls: ['./date.component.css'],
+  styleUrls: ['./date.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -8,21 +8,24 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { reducers } from './app.redux';
 import { ROUTES } from './app.routes';
-import { FooterComponent, LogoComponent } from './core/components';
-import { HttpInterceptorService, LoaderBlockServiceService } from './core/services';
-import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from './pages';
+import { AlertModule, ConfirmWindowModule, FooterComponent, LoaderBlockModule, LogoComponent } from './core/components';
+import { AlertService, ConfirmWindowService, HttpInterceptorService, LoaderBlockServiceService } from './core/services';
+import { AddCourseModule, CoursesModule, LoginModule, NoContentComponent } from './pages';
 
 @NgModule({
   declarations: [
     AppComponent,
     LogoComponent,
     FooterComponent,
+    NoContentComponent
   ],
   imports: [
     BrowserModule,
+    LoaderBlockModule,
+    ConfirmWindowModule,
+    AlertModule,
     CoursesModule,
     LoginModule,
-    NoContentModule,
     AddCourseModule,
     HttpClientModule,
     RouterModule.forRoot(ROUTES),
@@ -31,6 +34,8 @@ import { AddCourseModule, CoursesModule, LoginModule, NoContentModule } from './
   ],
   providers: [
     LoaderBlockServiceService,
+    ConfirmWindowService,
+    AlertService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,

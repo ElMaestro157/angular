@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { LoaderBlockServiceService, LoginService } from '../../core/services';
+import { AlertService, LoaderBlockServiceService, LoginService } from '../../core/services';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(private _fb: FormBuilder,
     private _loginService: LoginService,
     private _loaderService: LoaderBlockServiceService,
-    private _router: Router) { }
+    private _router: Router,
+    private _alertService: AlertService) { }
 
   ngOnInit() {
     this.formGroup = this._fb.group({
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit {
         this._router.navigateByUrl('courses');
       },
         (val) => {
-          alert('Failed');
+          this._alertService.show('Failed');
           this._loaderService.hide();
           console.log(val);
         });

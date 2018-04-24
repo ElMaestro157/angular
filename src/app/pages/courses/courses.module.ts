@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { LoaderBlockModule } from '../../core/components';
 import { CanActivateService } from '../../core/services';
 import { CourseModule } from './course';
 import { CoursesOrderByPipe } from './courses-order-by-pipe';
@@ -14,8 +13,7 @@ import { ToolboxModule } from './toolbox';
   imports: [
     CommonModule,
     ToolboxModule,
-    CourseModule,
-    LoaderBlockModule,
+    CourseModule
   ],
   providers: [CanActivateService, CoursesService],
   declarations: [

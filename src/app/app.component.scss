@@ -1,14 +1,14 @@
+@import 'core/partial';
+
 .main {
   margin: 3% 8% 0;
   position: relative;
   padding-bottom: 6rem;
   min-height: 100%;
-  color: white;
+  color: $soft-white;
 }
 
 .footer {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  @extend .right-bottom-left;
 }

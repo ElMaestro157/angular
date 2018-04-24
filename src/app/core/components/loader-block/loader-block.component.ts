@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoaderBlockServiceService } from '../../services';
@@ -6,30 +7,25 @@ import { LoaderBlockServiceService } from '../../services';
 @Component({
   selector: 'app-loader-block',
   templateUrl: './loader-block.component.html',
-  styleUrls: ['./loader-block.component.css'],
+  styleUrls: ['./loader-block.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderBlockComponent implements OnInit, OnDestroy {
 
-  private _show: boolean; // Boolean value of showing loader
   private _subscriber: Subscription;
 
-  constructor(private _changeDetector: ChangeDetectorRef, private _loaderService: LoaderBlockServiceService) {
+  @ViewChild('childModal') modal: ModalDirective;
+
+  constructor(private _loaderService: LoaderBlockServiceService) {
   }
 
   ngOnInit() {
     this._subscriber = this._loaderService.getShow.subscribe((val) => {
-      this._show = val;
-      this._changeDetector.markForCheck();
+      val ? this.modal.show() : this.modal.hide();
     });
   }
 
   ngOnDestroy() {
     this._subscriber.unsubscribe();
   }
-
-  isShowed(): boolean {
-    return this._show;
-  }
-
 }

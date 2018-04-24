@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Router } from '@angular/router';
 
 import { CourseItem } from '../../../core/entities';
+import { ConfirmWindowService } from '../../../core/services';
 
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
-  styleUrls: ['./course.component.css'],
+  styleUrls: ['./course.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseComponent {
@@ -14,12 +15,16 @@ export class CourseComponent {
 
   @Output() deleteEvent = new EventEmitter<CourseItem>();
 
-  constructor(private _router: Router) { }
+  constructor(private _router: Router, private _windowService: ConfirmWindowService) { }
 
   delete() {
-    if (confirm('Are you sure to delete this item?')) {
-      this.deleteEvent.emit(this.course);
-    }
+    this._windowService.isAgreed.subscribe((val) => {
+      this._windowService.hide();
+      if (val) {
+        this.deleteEvent.emit(this.course);
+      }
+    });
+    this._windowService.show('Are you sure to delete item?');
   }
 
   edit() {

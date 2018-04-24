@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
-import { LoaderBlockComponent } from './loader-block.component';
+import { AlertComponent } from './alert.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ModalModule.forRoot()
   ],
-  declarations: [LoaderBlockComponent],
-  exports: [LoaderBlockComponent]
+  declarations: [AlertComponent],
+  exports: [AlertComponent]
 })
-export class LoaderBlockModule { }
+export class AlertModule { }

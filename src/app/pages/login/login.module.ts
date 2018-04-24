@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { LoaderBlockModule } from '../../core/components';
 import { LoginService } from '../../core/services';
 import { LoginComponent } from './login.component';
 
@@ -10,8 +9,7 @@ import { LoginComponent } from './login.component';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    LoaderBlockModule
+    ReactiveFormsModule
   ],
   providers: [LoginService],
   exports: [LoginComponent],

@@ -17,7 +17,7 @@ import { Author } from '../../../core/entities';
 @Component({
   selector: 'app-authors',
   templateUrl: './authors.component.html',
-  styleUrls: ['./authors.component.css'],
+  styleUrls: ['./authors.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

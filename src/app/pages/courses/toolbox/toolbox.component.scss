@@ -1,0 +1,39 @@
+$input-width: 500px;
+$add-width: 200px;
+$side: 30px;
+$min-side: 20px;
+
+.main {
+  margin: 1% 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-find {
+  display: flex;
+}
+
+.input {
+  padding: 1%;
+  width: $input-width;
+  max-width: $input-width;
+  min-width: $add-width;
+}
+
+.find, .add {
+  font-weight: 600;
+  width: $add-width;
+  max-width: $add-width;
+  min-width: 100px;
+}
+
+.input-find > * {
+  margin-right: 5%;
+}
+
+.icon {
+  height: $side;
+  width: $side;
+  min-height: $min-side;
+  min-width: $min-side;
+}

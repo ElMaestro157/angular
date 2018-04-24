@@ -1,4 +1,6 @@
-.without-desc, .tit-id-dur {
+$size: 1.1rem;
+
+.block {
   display: flex;
   justify-content: space-between;
 }
@@ -11,14 +13,16 @@
 .desc {
   margin-top: 1.5%;
   text-indent: 2rem;
-  font-size: 1.1rem;
+  font-size: $size;
 }
 
 .tit-id-dur {
+  @extend .block;
   width: 800px;
 }
 
 .without-desc {
+  @extend .block;
   width: 1200px;
 }
 
@@ -28,6 +32,6 @@
 
 .star {
   color: yellow;
-  height: 1.1rem;
-  width: 1.1rem;
+  height: $size;
+  width: $size;
 }

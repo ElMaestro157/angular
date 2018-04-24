@@ -1,6 +1,8 @@
+$weight: 600;
+
 .main {
   margin-top: 1%;
-  padding: 1.5% 1.5%;
+  padding: 1.5%;
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
@@ -9,14 +11,14 @@
 
 .buttons {
   margin-left: 2%;
-  font-weight: 600;
+  font-weight: $weight;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 
 .btn {
-  font-weight: 600;
+  font-weight: $weight;
 }
 
 .top-rated {

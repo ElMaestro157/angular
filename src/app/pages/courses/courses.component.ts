@@ -9,7 +9,7 @@ import { CoursesService } from './courses-service';
   selector: 'app-courses',
   providers: [LoaderBlockServiceService],
   templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.css'],
+  styleUrls: ['./courses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursesComponent implements OnInit, OnDestroy {

@@ -4,7 +4,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgCont
 @Component({
   selector: 'app-duration',
   templateUrl: './duration.component.html',
-  styleUrls: ['./duration.component.css'],
+  styleUrls: ['./duration.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

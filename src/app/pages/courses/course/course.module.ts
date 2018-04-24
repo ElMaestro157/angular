@@ -9,7 +9,7 @@ import { CourseComponent } from './course.component';
 @NgModule({
   imports: [
     CommonModule,
-    CourseDetailsModule,
+    CourseDetailsModule
   ],
   declarations: [
     CourseComponent,
