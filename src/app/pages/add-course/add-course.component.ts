@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 import { CourseItem } from './../../core/entities';
 import { CoursesService } from './../courses/courses-service';
@@ -30,12 +31,10 @@ export class AddCourseComponent implements OnInit {
       // If clicked edit course button
       if (val.id) {
         this._courseService.getItem(+val.id).subscribe((course: CourseItem) => {
-          const month: number = course.date.getMonth() + 1;
-          const day: number = course.date.getDate();
           this.formGroup.setValue({
             title: course.title,
             description: course.description,
-            date: `${day < 10 ? '0' + day : day + ''}/${month < 10 ? '0' + month : month + ''}/${course.date.getFullYear()}`,
+            date: moment(course.date).format('DD/MM/YYYY'),
             duration: course.duration,
             authors: course.authors
           });

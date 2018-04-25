@@ -125,7 +125,7 @@ export class CoursesService {
   }
 
   private _getListFromServer(pages: number = 0, query?: string, count = this._COUNT): Observable<CourseItem[]> {
-    const params: { start, count, query? } = {
+    const params: { start: string, count: string, query?: string } = {
       start: pages + '',
       count: count + ''
     };

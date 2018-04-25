@@ -1,6 +1,7 @@
+@import '../../../core/partial';
+
 .main {
-  display: flex;
-  align-items: center;
+  @extend .flex-vertical-center;
   justify-content: space-between;
 }
 

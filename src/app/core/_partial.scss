@@ -1,7 +1,44 @@
 $soft-white: #EDF3F7;
 
+$big-font: 1.5rem;
+$mid-font: 1.2rem;
+
+$big-border-radius: 20px;
+$mid-border-radius: 10px;
+$low-border-radius: 5px;
+
+$big-margin: 5%;
+$mid-margin: 2%;
+$low-margin: 1.5%;
+$very-low-margin: 1%;
+
+$big-width: 300px;
+$mid-width: 100px;
+
+$font-weight: 600;
+
+
+.flex-vertical-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column-space-around {
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .right-bottom-left {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.text {
+  color: black;
 }

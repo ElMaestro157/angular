@@ -65,13 +65,13 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
   onClick(ind: number) {
     this.onTouch();
     const numb: number = this.selected[ind];
-    const temp: Author = !ind ? this.selectedAuthors[numb] : this.allAuthors[numb];
+    const author: Author = !ind ? this.selectedAuthors[numb] : this.allAuthors[numb];
     if (!ind) {
       this.selectedAuthors.splice(numb, 1);
-      this.allAuthors.push(temp);
+      this.allAuthors.push(author);
     } else {
       this.allAuthors.splice(numb, 1);
-      this.selectedAuthors.push(temp);
+      this.selectedAuthors.push(author);
     }
     this.selected[ind] = 0;
     this.onChange(this.selectedAuthors);

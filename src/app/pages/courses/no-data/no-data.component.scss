@@ -1,10 +1,10 @@
 @import '../../../core/partial';
 
 .main {
-  margin-top: 2%;
-  padding: 2%;
+  margin-top: $mid-margin;
+  padding: $mid-margin;
   background: #77CC02;
-  font-size: 1.5rem;
-  border-radius: 20px;
+  font-size: $big-font;
+  border-radius: $big-border-radius;
   text-align: center;
 }

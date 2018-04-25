@@ -21,9 +21,9 @@ export class ConfirmWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._subscriber = this._windowService.showing.subscribe((val: string) => {
-      if (val) {
-        this.message = val;
+    this._subscriber = this._windowService.showing.subscribe((value: string) => {
+      if (value) {
+        this.message = value;
         this._changeDetector.markForCheck();
         this.modal.show();
       } else {
@@ -41,7 +41,7 @@ export class ConfirmWindowComponent implements OnInit, OnDestroy {
   }
 
   decline() {
-    this._windowService.notAgreed();
+    this._windowService.declined();
   }
 
 }

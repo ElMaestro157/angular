@@ -18,14 +18,12 @@ $len: 17rem;
 }
 
 .list-group-item {
-  color: black;
+  @extend .text;
 }
 
 .buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  @extend .column-space-around;
+  @extend .flex-vertical-center;
   height: $len;
   margin: 0 10%;
 }
@@ -41,7 +39,7 @@ $len: 17rem;
 .scrollbar-morpheus-den::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: $soft-white;
-  border-radius: 10px;
+  border-radius: $mid-border-radius;
 }
 
 .scrollbar-morpheus-den::-webkit-scrollbar {
@@ -50,7 +48,7 @@ $len: 17rem;
 }
 
 .scrollbar-morpheus-den::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: $mid-border-radius;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-image: -webkit-gradient(linear, left bottom, left top, from(#30cfd0), to(#330867));
   background-image: -webkit-linear-gradient(bottom, #30cfd0 0%, #330867 100%);

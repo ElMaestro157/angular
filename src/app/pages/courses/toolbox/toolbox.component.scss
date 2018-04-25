@@ -2,33 +2,32 @@ $input-width: 500px;
 $add-width: 200px;
 $side: 30px;
 $min-side: 20px;
+@import '../../../core/partial';
 
 .main {
-  margin: 1% 0;
-  display: flex;
-  justify-content: space-between;
+  margin: $very-low-margin 0;
+  @extend .flex-space-between;
 }
 
 .input-find {
   display: flex;
+  input {
+    padding: $very-low-margin;
+    width: $input-width;
+    max-width: $input-width;
+    min-width: $add-width;
+  }
 }
 
-.input {
-  padding: 1%;
-  width: $input-width;
-  max-width: $input-width;
-  min-width: $add-width;
-}
-
-.find, .add {
-  font-weight: 600;
+.btn {
+  font-weight: $font-weight;
   width: $add-width;
   max-width: $add-width;
-  min-width: 100px;
+  min-width: $mid-width;
 }
 
 .input-find > * {
-  margin-right: 5%;
+  margin-right: $big-margin;
 }
 
 .icon {

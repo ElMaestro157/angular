@@ -1,24 +1,21 @@
-$weight: 600;
+@import '../../../core/partial';
 
 .main {
-  margin-top: 1%;
-  padding: 1.5%;
-  display: flex;
-  justify-content: space-between;
-  border-radius: 10px;
+  margin-top: $very-low-margin;
+  padding: $low-margin;
+  @extend .flex-space-between;
+  border-radius: $mid-border-radius;
   background: #68D8D6;
 }
 
 .buttons {
-  margin-left: 2%;
-  font-weight: $weight;
+  margin-left: $mid-margin;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  @extend .column-space-around;
 }
 
 .btn {
-  font-weight: $weight;
+  font-weight: $font-weight;
 }
 
 .top-rated {

@@ -3,10 +3,9 @@ $align: right;
 
 .main {
   margin-top: 4%;
-  display: flex;
+  @extend .flex-vertical-center;
   flex-direction: column;
-  align-items: center;
-  font-size: 1.2rem;
+  font-size: $mid-font;
 }
 
 .col-form-label {
@@ -20,8 +19,8 @@ $align: right;
 }
 
 .btn {
-  font-weight: 600;
-  width: 100px;
+  font-weight: $font-weight;
+  width: $mid-width;
   min-width: 50px;
 }
 
@@ -37,7 +36,7 @@ $align: right;
 .scrollbar-morpheus-den::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: $soft-white;
-  border-radius: 10px;
+  border-radius: $mid-border-radius;
 }
 
 .scrollbar-morpheus-den::-webkit-scrollbar {
@@ -46,7 +45,7 @@ $align: right;
 }
 
 .scrollbar-morpheus-den::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: $mid-border-radius;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-image: -webkit-gradient(linear, left bottom, left top, from(#30cfd0), to(#330867));
   background-image: -webkit-linear-gradient(bottom, #30cfd0 0%, #330867 100%);

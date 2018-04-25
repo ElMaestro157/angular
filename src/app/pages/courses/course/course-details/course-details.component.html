@@ -1,9 +1,9 @@
 <div class="without-desc">
   <div class="tit-id-dur">
-    <div class="title">{{course.title | uppercase}}</div>
-    <div class="id">{{course.id}}</div>
+    <div class="info">{{course.title | uppercase}}</div>
+    <div class="info">{{course.id}}</div>
     <div class="duration-star">
-      <div class="duration">
+      <div class="info">
         {{course.duration | courseDuration}}
       </div>
       <div *ngIf="course.topRated" class="star">
@@ -11,6 +11,6 @@
       </div>
     </div>
   </div>
-  <div class="date">{{course.date | date: 'dd/MM/yy'}}</div>
+  <div class="info">{{course.date | date: 'dd/MM/yy'}}</div>
 </div>
 <p class="desc">{{course.description}}</p>

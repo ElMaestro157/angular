@@ -26,6 +26,7 @@
     "@ngrx/store": "^5.2.0",
     "bootstrap": "^4.0.0",
     "core-js": "^2.4.1",
+    "moment": "^2.22.1",
     "ngx-bootstrap": "^2.0.2",
     "rx": "^4.1.0",
     "rxjs": "^5.5.6",

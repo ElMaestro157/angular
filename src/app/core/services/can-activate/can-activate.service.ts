@@ -7,13 +7,13 @@ import { LoginService } from './../login-service';
 @Injectable()
 export class CanActivateService implements CanActivate {
 
-  constructor(private _router: Router, private authServ: LoginService) { }
+  constructor(private _router: Router, private _authServ: LoginService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-    if (!this.authServ.getToken) {
+    if (!this._authServ.getToken) {
       this._router.navigateByUrl('');
     }
-    return !!this.authServ.getToken;
+    return !!this._authServ.getToken;
   }
 
 }

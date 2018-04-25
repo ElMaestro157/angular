@@ -14,7 +14,7 @@ export class AuthorsService {
     const url: string = BASE_URL + '/courses' + (course ? `/${course.id}` : '/getAuthors');
 
     return this._http.get<any>(url)
-          .map(value => course ? value.authors.map((val: any) => Author.toDTO(val))
-            : value.map((val: any) => Author.toDTO(val)));
+          .map(value => course ? value.authors.map((author: any) => Author.toDTO(author))
+            : value.map((author: any) => Author.toDTO(author)));
   }
 }

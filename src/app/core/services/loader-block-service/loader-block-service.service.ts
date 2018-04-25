@@ -7,7 +7,7 @@ export class LoaderBlockServiceService {
 
   private _show: Subject<boolean> = new Subject();
 
-  public get getShow(): Observable<boolean> {
+  public get isShowed(): Observable<boolean> {
     return this._show.asObservable();
   }
 

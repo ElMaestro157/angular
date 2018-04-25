@@ -3,28 +3,23 @@ $min-side: 40px;
 @import '../../partial';
 
 .main {
+  div {
+    @extend .flex-vertical-center;
+  }
   padding: 3%;
-  display: flex;
-  justify-content: space-between;
+  @extend .flex-space-between;
   font-size: 3rem;
-  border-radius: 20px;
+  border-radius: $big-border-radius;
   background: #F7C62E;
 }
 
-.block {
-  display: flex;
-  align-items: center;
-}
-
 .img-logo-but {
-  @extend .block;
   width: 500px;
   justify-content: space-between;
 }
 
 .user-logoff {
-  @extend .block;
-  font-size: 1.2rem;
+  font-size: $mid-font;
   flex-direction: column;
   justify-content: center;
 }
@@ -37,7 +32,7 @@ $min-side: 40px;
 }
 
 .courses {
-  font-size: 1.5rem;
+  font-size: $big-font;
 }
 
 .logoff {

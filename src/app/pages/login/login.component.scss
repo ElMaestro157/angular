@@ -2,25 +2,22 @@
 
 .main {
   margin-top: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  font-size: 1.2rem;
+  @extend .flex-vertical-center;
+  @extend .column-space-around;
+  font-size: $mid-font;
   color: $soft-white;
 }
 
 .input {
   text-align: left;
-  width: 500px;
-  max-width: 300px;
+  width: $big-width;
   min-width: 200px;
 }
 
 .enter {
   text-align: center;
-  margin-top: 1%;
-  font-weight: 600;
-  width: 100px;
+  margin-top: $very-low-margin;
+  font-weight: $font-weight;
+  width: $mid-width;
   min-width: 20px;
 }

@@ -1,28 +1,26 @@
 $size: 1.1rem;
+@import '../../../../core/partial';
 
-.block {
-  display: flex;
-  justify-content: space-between;
-}
-
-.title, .id, .duration, .date {
-  font-size: 1.5rem;
-  font-weight: 600;
+.info {
+  font-size: $big-font;
+  font-weight: $font-weight;
 }
 
 .desc {
-  margin-top: 1.5%;
+  margin-top: $low-margin;
   text-indent: 2rem;
   font-size: $size;
 }
 
+.tit-id-dur, .without-desc {
+  @extend .flex-space-between;
+}
+
 .tit-id-dur {
-  @extend .block;
   width: 800px;
 }
 
 .without-desc {
-  @extend .block;
   width: 1200px;
 }
 

@@ -21,7 +21,7 @@ export class ConfirmWindowService extends AlertService {
     this._agreed.next(true);
   }
 
-  notAgreed() {
+  declined() {
     this._agreed.next(false);
   }
 
