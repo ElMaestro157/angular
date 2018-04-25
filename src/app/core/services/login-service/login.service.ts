@@ -21,18 +21,18 @@ export class LoginService {
 
   // Observable for user's name for LogoComponent
   get getUserNameObs(): Observable<string> {
-    return this.store.select('user').map(user => user ? user.getName.first + ' ' + user.getName.last : null);
+    return this.store.select('user').map((user: User) => user ? user.getName.first + ' ' + user.getName.last : null);
   }
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     // Getting user from sessionStorage, if exists
-    const temp = JSON.parse(sessionStorage.getItem('user'));
+    const temp: any = JSON.parse(sessionStorage.getItem('user'));
     if (temp) {
       this.store.dispatch({ type: STORE_USER, payload: new User(temp.id, temp.name, temp.login, temp.password, temp.token) });
     }
 
     // Subscribing on user's changes
-    this.store.select('user').subscribe(user => {
+    this.store.select('user').subscribe((user: User) => {
       this._token = user ? user.getToken : null;
       sessionStorage.setItem('user', JSON.stringify(user));
     });
@@ -45,7 +45,7 @@ export class LoginService {
     return this.http.post(BASE_URL + '/auth/userinfo', { }, {
       headers: headers
     })
-    .map((user) => this._toDTO(user));
+    .map((user) => User.toDTO(user));
   }
 
   // Reqeust to server for logging
@@ -56,7 +56,7 @@ export class LoginService {
     })
     .map(({ token }) => {
       this._token = token;
-      this.getUserInfo().subscribe((user) => this.store.dispatch({ type: STORE_USER, payload: user }));
+      this.getUserInfo().subscribe((user: User) => this.store.dispatch({ type: STORE_USER, payload: user }));
     });
   }
 
@@ -66,10 +66,5 @@ export class LoginService {
 
   isAuthenticated(): boolean {
     return this._token !== null;
-  }
-
-  // Mapping objects to User type
-  private _toDTO(user: any): User {
-    return new User(user.id, user.name, user.login, user.password, user.fakeToken);
   }
 }

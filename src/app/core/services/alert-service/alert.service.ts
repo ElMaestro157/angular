@@ -7,7 +7,7 @@ export class AlertService {
 
   private _show = new Subject<string>();
 
-  public get isShowed(): Observable<string> {
+  public get showing(): Observable<string> {
     return this._show.asObservable();
   }
 

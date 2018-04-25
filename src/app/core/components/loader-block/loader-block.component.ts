@@ -20,7 +20,7 @@ export class LoaderBlockComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._subscriber = this._loaderService.getShow.subscribe((val) => {
+    this._subscriber = this._loaderService.getShow.subscribe((val: boolean) => {
       val ? this.modal.show() : this.modal.hide();
     });
   }

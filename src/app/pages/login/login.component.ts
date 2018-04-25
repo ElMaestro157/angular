@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         this._loaderService.hide();
         this._router.navigateByUrl('courses');
       },
-        (val) => {
+        (val: any) => {
           this._alertService.show('Failed');
           this._loaderService.hide();
           console.log(val);

@@ -29,9 +29,9 @@ export class AddCourseComponent implements OnInit {
     this._route.params.subscribe((val) => {
       // If clicked edit course button
       if (val.id) {
-        this._courseService.getItem(+val.id).subscribe((course) => {
-          const month = course.date.getMonth() + 1;
-          const day = course.date.getDate();
+        this._courseService.getItem(+val.id).subscribe((course: CourseItem) => {
+          const month: number = course.date.getMonth() + 1;
+          const day: number = course.date.getDate();
           this.formGroup.setValue({
             title: course.title,
             description: course.description,
@@ -55,7 +55,7 @@ export class AddCourseComponent implements OnInit {
   }
 
   save() {
-    const dateArr = this.formGroup.value.date.split('/');
+    const dateArr: string[] = this.formGroup.value.date.split('/');
     const course = new CourseItem(
       this._id,
       this.formGroup.value.title,

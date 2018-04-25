@@ -24,7 +24,7 @@ export class DurationComponent implements OnInit, ControlValueAccessor {
       duration: new FormControl('')
     });
 
-    this.formGroup.valueChanges.subscribe(data => {
+    this.formGroup.valueChanges.subscribe((data: any) => {
       this.onChange(this.value);
       this._changeDetector.markForCheck();
     });

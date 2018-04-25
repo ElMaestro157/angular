@@ -8,7 +8,7 @@ import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 export class DurationValidatorDirective implements Validator {
 
   validate(control: AbstractControl): { [key: string]: any; } {
-    const duration = +control.value;
+    const duration: number = +control.value;
     if (!isNaN(duration) && duration > 0) {
       return null;
     }

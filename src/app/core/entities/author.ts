@@ -28,4 +28,16 @@ export class Author {
   public get getLastName(): string {
     return this.lastName;
   }
+
+  public static toDTO(value: any): Author {
+    return new Author(value.id, value.firstName, value.lastName);
+  }
+
+  public static toServer(author: Author): any {
+    return {
+      id: author.getId,
+      firstName: author.getFirstName,
+      lastName: author.getLastName
+    };
+  }
 }

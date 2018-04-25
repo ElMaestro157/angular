@@ -31,18 +31,18 @@ export class CoursesService {
     this._loadToStore(SET_LIST);
     this._start += this._COUNT;
 
-    this._search.skip(1).subscribe((val) => {
+    this._search.skip(1).subscribe((val: string) => {
       this._loadToStore(SET_LIST, this._start, val);
     });
 
     // Subscribing on changes from redux course's state for updating list
-    this._store.select('addEditCourse').skip(1).subscribe((course) => {
+    this._store.select('addEditCourse').skip(1).subscribe((course: CourseItem) => {
       if (course.id) {
         this._updateCourseOnServer(course).subscribe(() => {
           this._store.dispatch({ type: EDIT_COURSE, payload: course });
         });
       } else {
-        this._createCourseOnServer(course).subscribe((res) => {
+        this._createCourseOnServer(course).subscribe((res: string) => {
           course.id = +res;
           this._store.dispatch({ type: ADD_COURSE, payload: course });
         });
@@ -52,7 +52,7 @@ export class CoursesService {
 
   // Universal function for pushing/setting list in redux store
   private _loadToStore(type: string, start = this._start, query = this._search.value, count = this._COUNT) {
-    this._getListFromServer(start, query, count).subscribe((courses) => {
+    this._getListFromServer(start, query, count).subscribe((courses: CourseItem[]) => {
       this._store.dispatch({ type: type, payload: courses });
     });
   }
@@ -93,16 +93,16 @@ export class CoursesService {
   // Gettin info about course
   getItem(id: number): Observable<CourseItem> {
     return this._http.get(BASE_URL + '/courses/' + id)
-                      .map((value) => this._toDTOCourse(value));
+                      .map((value: any) => CourseItem.toDTO(value));
   }
 
   filterOutdated() {
     const date = new Date();
     date.setDate(date.getDate() - 14);
 
-    this._store.select('courses').subscribe(courses => {
+    this._store.select('courses').subscribe((courses: CourseItem[]) => {
       this._store.dispatch({
-        type: SET_LIST, payload: courses.filter((val) => {
+        type: SET_LIST, payload: courses.filter((val: CourseItem) => {
           return val.date >= date;
         })
       });
@@ -134,9 +134,9 @@ export class CoursesService {
     }
     return this._http.get<any>(BASE_URL + '/courses', {
       params: params
-    }).map((coursesObj) => {
+    }).map((coursesObj: { length: number, courses: any[] }) => {
         this._length = coursesObj.length;
-        return Array.from(coursesObj.courses).map((obj) => this._toDTOCourse(obj));
+        return coursesObj.courses.map((obj: any) => CourseItem.toDTO(obj));
       });
   }
 
@@ -147,52 +147,17 @@ export class CoursesService {
   }
 
   private _createCourseOnServer(course: CourseItem): Observable<string> {
-    return this._http.post(BASE_URL + '/courses', this._toServerCourse(course), {
+    return this._http.post(BASE_URL + '/courses', CourseItem.toServer(course), {
       responseType: 'text'
     });
   }
 
   private _updateCourseOnServer(course: CourseItem): Observable<void> {
-    const body = this._toServerCourse(course);
+    const body: any = CourseItem.toServer(course);
     body.id = course.id;
 
     return this._http.post(BASE_URL + '/courses/' + course.id, body, {
       responseType: 'text'
     }).map(() => { });
   }
-
-  private _toDTOCourse(val: any): CourseItem {
-    return new CourseItem(+val.id,
-      val.name, new Date(val.date),
-      +val.length, val.description,
-      !!val.isTopRated,
-      this._toDTOAuthors(val.authors));
-  }
-
-  private _toServerCourse(course: CourseItem): any {
-    return {
-      // id: course.id,
-      name: course.title,
-      description: course.description,
-      isTopRated: course.topRated,
-      date: course.date.toDateString(),
-      authors: this._toServerAuthors(course.authors),
-      length: '' + course.duration,
-    };
-  }
-
-  private _toDTOAuthors(authors: any[]): Author[] {
-    return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
-  }
-
-  private _toServerAuthors(authors: Author[]): any[] {
-    return authors.map((value) => {
-      return {
-        id: value.getId,
-        firstName: value.getFirstName,
-        lastName: value.getLastName
-      };
-    });
-  }
-
 }

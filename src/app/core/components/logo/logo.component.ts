@@ -29,7 +29,7 @@ export class LogoComponent implements OnInit, OnDestroy {
     this._loginSubscriber = this._loginService.getUserNameObs.subscribe(() => {
       this._changeDetector.markForCheck();
     });
-    this._routerSubscriber = this._router.events.subscribe((events) => {
+    this._routerSubscriber = this._router.events.subscribe((events: any | NavigationStart) => {
       if (events instanceof NavigationStart) {
         this.breadcrumb = events.url.split('/')[1].toUpperCase();
         this._changeDetector.markForCheck();

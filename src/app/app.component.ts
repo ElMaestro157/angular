@@ -7,8 +7,8 @@ import { ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit } from '@
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
-  timer = 0;
-  title = 'app';
+  private _timer = 0;
+  public title = 'app';
 
   constructor(private _zone: NgZone) {
 
@@ -17,11 +17,11 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._zone.onUnstable.subscribe(() => {
       // console.log('Detection started');
-      this.timer = performance.now();
+      this._timer = performance.now();
     });
     this._zone.onStable.subscribe(() => {
-      this.timer = -this.timer + performance.now();
-      console.log('Detection ended. Time: ', this.timer, ' ms');
+      this._timer = -this._timer + performance.now();
+      console.log('Detection ended. Time: ', this._timer, ' ms');
     });
   }
 

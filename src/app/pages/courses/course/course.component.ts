@@ -18,7 +18,7 @@ export class CourseComponent {
   constructor(private _router: Router, private _windowService: ConfirmWindowService) { }
 
   delete() {
-    this._windowService.isAgreed.subscribe((val) => {
+    this._windowService.isAgreed.subscribe((val: boolean) => {
       this._windowService.hide();
       if (val) {
         this.deleteEvent.emit(this.course);

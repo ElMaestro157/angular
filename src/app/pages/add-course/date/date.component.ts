@@ -23,7 +23,7 @@ export class DateComponent implements OnInit, ControlValueAccessor {
     this.formGroup = new FormGroup({
       date: new FormControl('')
     });
-    this.formGroup.valueChanges.subscribe(data => {
+    this.formGroup.valueChanges.subscribe((data: any) => {
       this.onChange(this.value);
       this._changeDetector.markForCheck();
     });

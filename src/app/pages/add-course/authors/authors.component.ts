@@ -43,10 +43,10 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
 
   ngOnInit() {
     this.ngControl = this._inj.get(NgControl);
-    this._subscriber = this.authors.subscribe((authors) => {
+    this._subscriber = this.authors.subscribe((authors: Author[]) => {
       if (this.value && this.value !== []) {
-        const selectedAuthSet = new Set(this.selectedAuthors.map((elem) => elem.getId));
-        this.allAuthors = authors.filter((elem) => !selectedAuthSet.has(elem.getId));
+        const selectedAuthSet = new Set(this.selectedAuthors.map((elem: Author) => elem.getId));
+        this.allAuthors = authors.filter((elem: Author) => !selectedAuthSet.has(elem.getId));
       } else {
         this.allAuthors = authors;
       }
@@ -64,8 +64,8 @@ export class AuthorsComponent implements OnInit, OnDestroy, ControlValueAccessor
 
   onClick(ind: number) {
     this.onTouch();
-    const numb = this.selected[ind];
-    const temp = !ind ? this.selectedAuthors[numb] : this.allAuthors[numb];
+    const numb: number = this.selected[ind];
+    const temp: Author = !ind ? this.selectedAuthors[numb] : this.allAuthors[numb];
     if (!ind) {
       this.selectedAuthors.splice(numb, 1);
       this.allAuthors.push(temp);

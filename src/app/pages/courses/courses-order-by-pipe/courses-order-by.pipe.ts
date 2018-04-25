@@ -8,7 +8,7 @@ import { CourseItem } from './../../../core/entities';
 export class CoursesOrderByPipe implements PipeTransform {
 
   transform(value: CourseItem[]): CourseItem[] {
-    value.sort((a, b) => {
+    value.sort((a: CourseItem, b: CourseItem) => {
       return a.date.valueOf() - b.date.valueOf();
     });
     return value;

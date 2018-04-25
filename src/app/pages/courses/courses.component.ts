@@ -23,7 +23,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
             ) { }
 
   ngOnInit() {
-    this._subscriber = this._coursesService.getList.subscribe((val) => {
+    this._subscriber = this._coursesService.getList.subscribe((val: CourseItem[]) => {
       this.courses = val;
       this._changeDetector.markForCheck();
     });

@@ -11,13 +11,10 @@ export class AuthorsService {
   constructor(private _http: HttpClient) { }
 
   getAuthors(course?: CourseItem): Observable<Author[]> {
-    const url = BASE_URL + '/courses' + (course ? `/${course.id}` : '/getAuthors');
+    const url: string = BASE_URL + '/courses' + (course ? `/${course.id}` : '/getAuthors');
 
     return this._http.get<any>(url)
-          .map(value => course ? this._toDTO(value.authors) : this._toDTO(value));
-  }
-
-  private _toDTO(authors: any[]): Author[] {
-    return authors.map((value) => new Author(value.id, value.firstName, value.lastName));
+          .map(value => course ? value.authors.map((val: any) => Author.toDTO(val))
+            : value.map((val: any) => Author.toDTO(val)));
   }
 }

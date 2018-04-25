@@ -57,4 +57,8 @@ export class User {
     return this.token;
   }
 
+  // Mapping objects to User type
+  public static toDTO(user: any): User {
+    return new User(user.id, user.name, user.login, user.password, user.fakeToken);
+  }
 }

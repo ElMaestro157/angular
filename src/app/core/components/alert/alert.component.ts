@@ -20,7 +20,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   constructor(private _changeDetector: ChangeDetectorRef, private _alertService: AlertService) { }
 
   ngOnInit() {
-    this._subscriber = this._alertService.isShowed.subscribe((val) => {
+    this._subscriber = this._alertService.showing.subscribe((val: string) => {
       if (val) {
         this.message = val;
         this._changeDetector.markForCheck();

@@ -8,7 +8,7 @@ import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 export class DateValidatorDirective implements Validator {
 
   validate(control: AbstractControl): { [key: string]: any; } {
-    const validDatePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    const validDatePattern: RegExp = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
 
     if (!control.value.match(validDatePattern)) {
       return { 'invalidDate': true };

@@ -21,7 +21,7 @@ export class ConfirmWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._subscriber = this._windowService.isShowed.subscribe((val) => {
+    this._subscriber = this._windowService.showing.subscribe((val: string) => {
       if (val) {
         this.message = val;
         this._changeDetector.markForCheck();
