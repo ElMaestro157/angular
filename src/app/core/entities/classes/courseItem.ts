@@ -1,5 +1,5 @@
 import { Author } from './author';
-import { Course } from './interfaces';
+import { Course } from '../interfaces';
 
 export class CourseItem implements Course {
 
